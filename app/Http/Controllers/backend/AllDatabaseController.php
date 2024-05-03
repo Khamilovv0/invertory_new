@@ -103,7 +103,7 @@ class AllDatabaseController extends Controller
 
             // Если запись найдена, обновляем ее значение, если нет - создаем новую запись
             if ($characteristic) {
-                $characteristic->update(['characteristic_value' => $value]);
+                $characteristic->update(['characteristic_value'=>$value]);
             } else {
                 in_characteristics_for_product::insert([
                     'id_product' => $id_product,

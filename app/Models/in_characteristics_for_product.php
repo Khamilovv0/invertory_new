@@ -11,6 +11,7 @@ class in_characteristics_for_product extends Model
     // другие свойства и методы
 
     protected $table = 'in_characteristics_for_products';
+    protected $primaryKey = 'id_characteristics_for_product';
 
     public function characteristic()
     {
