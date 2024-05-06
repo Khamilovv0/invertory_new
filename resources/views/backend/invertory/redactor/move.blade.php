@@ -6,10 +6,10 @@
         use Illuminate\Support\Facades\DB;
 
         $product_name= DB::table('in_product_name')->get();
-        $tutor = DB::connection('mysql_platonus')->table('tutors')->get();
+        /*$tutor = DB::connection('mysql_platonus')->table('tutors')->get();
         $building = DB::table('buildings')->get();
         $auditories = DB::table('auditories')->get();
-        $sortedAuditories = $auditories->sortBy('auditoryName');
+        $sortedAuditories = $auditories->sortBy('auditoryName');*/
 
     @endphp
     <div class="card-body">
@@ -35,7 +35,7 @@
                                                     <option value="{{$edit->id_name}}">{{$edit->name_product}}</option>
                                             </select>
                                         </div>
-                                        <div class="form-group">
+                                        {{--<div class="form-group">
                                             <h5><strong>Местоположение</strong></h5>
                                             <label for="building">Корпус</label>
                                             <select id="building" name="buildingID" class="form-control">
@@ -61,7 +61,7 @@
                                                     <option value="{{$tutors->TutorID}}">{{$tutors->lastname}} {{$tutors->firstname}}</option>
                                                 @endforeach
                                             </select>
-                                        </div>
+                                        </div>--}}
                                         <div class="form-group">
                                             <label for="type">Назначение</label>
                                             <select id="type" name="type" class="form-control">

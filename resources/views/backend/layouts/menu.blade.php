@@ -45,6 +45,12 @@
             <p>Общая база</p>
         </a>
     </li>
+    <li class="nav-item">
+        <a href="{{route('change_tutor')}}" class="nav-link">
+            <i class="nav-icon fas fa-retweet"></i>
+            <p>Перемещение</p>
+        </a>
+    </li>
 
     @php
 

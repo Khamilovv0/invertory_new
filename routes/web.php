@@ -56,10 +56,13 @@ Route::get('/get-auditories/{building}', [DitInvertoryController::class,'forBuil
 Route::get('/dahr_create', [DahrInvertoryController::class,'CreateDahr'])->name('createDahr');
 
 Route::get('/all', [AllDatabaseController::class,'all'])->name('all');
-Route::get('/all/{id}', [AllDatabaseController::class,'editAll'])->name('editAll');
-Route::post('/all/update/{id}', [AllDatabaseController::class,'updateAll'])->name('updateAll');
-Route::post('/all/confirm/{id}', [AllDatabaseController::class,'confirmStatus'])->name('confirmStatus');
-Route::post('/all/refuse/{id}', [AllDatabaseController::class,'refuseStatus'])->name('refuseStatus');
-Route::get('/get-product-form/{id}', [AllDatabaseController::class,'getForm'])->name('getForm');
+Route::get('/all/{id}', [MoveAndChangeController::class,'editAll'])->name('editAll');
+Route::post('/all/update/{id}', [MoveAndChangeController::class,'updateAll'])->name('updateAll');
+Route::post('/all/confirm/{id}', [MoveAndChangeController::class,'confirmStatus'])->name('confirmStatus');
+Route::post('/all/refuse/{id}', [MoveAndChangeController::class,'refuseStatus'])->name('refuseStatus');
+Route::get('/get-product-form/{id}', [MoveAndChangeController::class,'getForm'])->name('getForm');
+
+Route::get('/change', [MoveAndChangeController::class,'change_tutor'])->name('change_tutor');
+Route::get('/change/search', [MoveAndChangeController::class, 'search_item'])->name('search_item');
 
 
