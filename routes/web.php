@@ -64,5 +64,8 @@ Route::get('/get-product-form/{id}', [MoveAndChangeController::class,'getForm'])
 
 Route::get('/change', [MoveAndChangeController::class,'change_tutor'])->name('change_tutor');
 Route::get('/change/search', [MoveAndChangeController::class, 'search_item'])->name('search_item');
+Route::get('/edit/{id}', [MoveAndChangeController::class,'editChange'])->name('editChange');
+Route::post('/insert/{id}', [MoveAndChangeController::class,'insert'])->name('insert');
+Route::get('/story/{id}', [MoveAndChangeController::class,'story'])->name('story');
 
 

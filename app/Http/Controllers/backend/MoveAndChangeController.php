@@ -45,6 +45,7 @@ class MoveAndChangeController extends Controller
                 'in_product_name.name_product',
                 DB::raw("CONCAT(tutors.lastname, ' ', tutors.firstname) AS tutor_fullname")
             )
+            ->where('in_product_lists.actual_inventory', 1)
             ->find($id_product);
         return view('backend.invertory.redactor.move', compact('edit'));
     }
@@ -103,7 +104,7 @@ class MoveAndChangeController extends Controller
                 ]);
             }
         }
-            return redirect()->back()->with('success','Инвертаризация успешна обновлена!');
+        return redirect()->route('all')->with('success','Инвертаризация успешна обновлена!');
     }
 
     public function confirmStatus($id)
@@ -167,10 +168,89 @@ class MoveAndChangeController extends Controller
                 'in_product_name.name_product',
                 DB::raw("CONCAT(tutors.lastname, ' ', tutors.firstname) AS tutor_fullname")
             )
+            ->where('in_product_lists.actual_inventory', 1)
             ->get();
 
         // Возвращаем результат поиска на страницу search.blade.php
         return view('backend.invertory.redactor.search')->with('product', $products)->with('query', $query);
     }
+
+    public function editChange ($id_product)
+    {
+        $edit = in_product_lists::with(['characteristics' => function ($query) {
+            $query->with('characteristic');
+        }])
+            ->leftJoin('auditories', 'in_product_lists.auditoryID', '=', 'auditories.auditoryID')
+            ->leftJoin('buildings', 'in_product_lists.buildingID', '=', 'buildings.buildingID')
+            ->leftJoin('in_product_name', 'in_product_lists.id_name', '=', 'in_product_name.id_name')
+            ->leftJoin('tutors', 'in_product_lists.TutorID', '=', 'tutors.TutorID')
+            ->select(
+                'in_product_lists.*',
+                'buildings.buildingName',
+                'auditories.auditoryName',
+                'in_product_name.name_product',
+                DB::raw("CONCAT(tutors.lastname, ' ', tutors.firstname) AS tutor_fullname")
+            )
+            ->where('in_product_lists.actual_inventory', 1)
+            ->find($id_product);
+        return view('backend.invertory.redactor.edit_change', compact('edit'));
+    }
+
+    public function insert(Request $request, $id_product)
+    {
+        $id = DB::table('in_product_lists')->insertGetId([
+            'id_name' => $request->input('id_name'),
+            'buildingID' => $request->input('buildingID'),
+            'auditoryID' => $request->input('auditoryID'),
+            'TutorID' => $request->input('TutorID'),
+            'type' => $request->input('type'),
+            'inv_number' => $request->input('inv_number')
+        ]);
+
+        in_product_lists::where('id_product', $id_product)->update(['actual_inventory' => 0]);
+
+        $values = $request->names;
+        $id_characteristics = $request->id;
+        foreach ($values as $index => $value) {
+            $id_characteristic = $id_characteristics[$index];
+
+            $characteristic = in_characteristics_for_product::where('id_product', $id_product)
+                ->where('id_characteristic', $id_characteristic);
+
+            if ($characteristic) {
+                $characteristic->update(['id_product' => $id]);
+            } else {
+                // Иначе, вставляем новую запись
+                in_characteristics_for_product::insert([
+                    'id_product' => $id,
+                    'id_characteristic' => $id_characteristic,
+                    'characteristic_value' => $value,
+                ]);
+            }
+
+        }
+
+        return redirect()->route('all')->with('success','Перемещение успешно совершено!');
+    }
+
+    public function story($id_name){
+
+        $results = DB::table('in_product_lists')
+            ->where('id_name', $id_name)
+            ->join('auditories', 'in_product_lists.auditoryID', '=', 'auditories.auditoryID')
+            ->join('tutors', 'in_product_lists.TutorID', '=', 'tutors.TutorID')
+            ->select(
+                'auditories.auditoryName',
+                DB::raw("CONCAT(tutors.lastname, ' ', tutors.firstname) AS tutor_fullname"),
+                'in_product_lists.updated_at'
+            )
+            ->orderBy('updated_at', 'ASC')
+            ->get();
+
+        return view('backend.invertory.redactor.story', compact('results'));
+    }
+
+
+
 
 }

@@ -14,6 +14,34 @@
     @endphp
     <div class="card-body">
         <div class="row">
+            <div class="col-md-8">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Поиск по инвертарьному номеру</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form action="{{ route('search_item') }}" method="GET">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="search">Введите инвертарьный номер</label>
+                                            <input id="search" class="form-control" type="text" name="query" placeholder="Введите запрос..." value="">
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <button class="btn btn-primary" type="submit">Искать</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.card -->
+            </div>
             <div class="col-md-12">
                 <div class="card card-primary">
                     <div class="card-header">
@@ -36,6 +64,8 @@
                                     <th>Аудитория</th>
                                     <th>Ответственное лицо</th>
                                     <th>Инвертарный номер</th>
+                                    <th>Назначение</th>
+                                    <th>Характеристика</th>
                                     <th>Дата редактирования</th>
                                     <th>Редактирование</th>
                                     <th>Статус</th>
@@ -57,10 +87,25 @@
                                         <td>{{ $products->auditoryName }}</td>
                                         <td>{{ $products->tutor_fullname }}</td>
                                         <td>{{ $products->inv_number }}</td>
-                                        <td align="center"><p >{{$formattedDate}}</p></td>
-                                        <td align="center"><a href="{{route('editAll', $products->id_product)}}" class="btn-sm  btn-danger">Редактировать</a></td>
                                         <td>
+                                            @if($products->type == 1)
+                                                Личный
+                                            @elseif($products->type == 2)
+                                                Аудиторный
+                                            @endif
+                                        </td>
+                                        <td>@foreach($products->characteristics as $characteristic)
+                                                <strong>{{ $characteristic->characteristic->name_characteristic }}:</strong> {{ $characteristic->characteristic_value }};
+                                                <br>
+                                            @endforeach
+                                        </td>
+                                        <td align="center"><p >{{$formattedDate}}</p></td>
+                                        <td align="center">
+                                            <a href="{{route('editChange', $products->id_product)}}" class="btn-sm  btn-danger">Редактировать</a>
 
+                                            <a style="margin-top: 5%" href="{{route('story', $products->id_name)}}" class="btn  btn-success">История перемещения</a>
+                                        </td>
+                                        <td>
                                             @if($products->status == 1)
                                                 <span class="badge bg-warning">На проверке</span>
                                             @elseif($products->status == 2)
@@ -68,7 +113,6 @@
                                             @elseif($products->status == 3)
                                                 <span class="badge bg-danger">Отказано</span>
                                             @endif
-
                                         </td>
                                         @if (in_array(Auth::user()->TutorID, $adminTutorID))
                                             <td>
@@ -93,6 +137,8 @@
                                     <th>Аудитория</th>
                                     <th>Ответственное лицо</th>
                                     <th>Инвертарный номер</th>
+                                    <th>Назначение</th>
+                                    <th>Характеристика</th>
                                     <th>Дата редактирования</th>
                                     <th>Редактирование</th>
                                     <th>Статус</th>

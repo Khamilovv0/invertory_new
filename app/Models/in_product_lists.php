@@ -9,6 +9,8 @@ use App\Models\in_characteristics_for_product;
 class in_product_lists extends Model
 {
 
+    public $timestamps = false;
+
     protected $table = 'in_product_lists';
     protected $primaryKey = 'id_product';
 

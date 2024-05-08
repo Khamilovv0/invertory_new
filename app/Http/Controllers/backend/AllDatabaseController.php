@@ -36,6 +36,7 @@ class AllDatabaseController extends Controller
                 'in_product_name.name_product',
                 DB::raw("CONCAT(tutors.lastname, ' ', tutors.firstname) AS tutor_fullname")
             )
+            ->where('in_product_lists.actual_inventory', 1)
             ->get();
 
 
@@ -43,7 +44,5 @@ class AllDatabaseController extends Controller
 
         return view('backend.invertory.create_invertory.all_db', ['items' => $items]);
     }
-
-
 
 }
