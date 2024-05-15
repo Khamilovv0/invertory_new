@@ -28,21 +28,21 @@ class AllDatabaseController extends Controller
             ->leftJoin('auditories', 'in_product_lists.auditoryID', '=', 'auditories.auditoryID')
             ->leftJoin('buildings', 'in_product_lists.buildingID', '=', 'buildings.buildingID')
             ->leftJoin('in_product_name', 'in_product_lists.id_name', '=', 'in_product_name.id_name')
-            ->leftJoin('tutors', 'in_product_lists.TutorID', '=', 'tutors.TutorID')
+            ->leftJoin('tutors AS tutor', 'in_product_lists.TutorID', '=', 'tutor.TutorID')
+            ->leftJoin('tutors AS redactor', 'in_product_lists.redactor_id', '=', 'redactor.TutorID')
             ->select(
                 'in_product_lists.*',
                 'buildings.buildingName',
                 'auditories.auditoryName',
                 'in_product_name.name_product',
-                DB::raw("CONCAT(tutors.lastname, ' ', tutors.firstname) AS tutor_fullname")
+                DB::raw("CONCAT(tutor.lastname, ' ', tutor.firstname) AS tutor_fullname"),
+                DB::raw("CONCAT(redactor.lastname, ' ', redactor.firstname) AS redactor_fullname")
             )
             ->where('in_product_lists.actual_inventory', 1)
             ->get();
 
-
-
-
         return view('backend.invertory.create_invertory.all_db', ['items' => $items]);
     }
+
 
 }

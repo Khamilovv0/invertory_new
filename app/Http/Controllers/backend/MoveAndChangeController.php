@@ -7,6 +7,7 @@ use App\Models\in_characteristics_for_product;
 use App\Models\in_list_characteristics;
 use App\Models\in_product_list_characteristics;
 use App\Models\in_product_lists;
+use App\Models\in_messages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -78,6 +79,8 @@ class MoveAndChangeController extends Controller
         $data['auditoryID'] = $request->auditoryID;
         $data['TutorID'] = $request->TutorID;
         $data['status'] = 1;
+        $data['redactor_id'] = Auth::user()->TutorID;
+
         $update = DB::table('in_product_lists')->where('id_product', $id_product)->update($data);
 
 
@@ -118,16 +121,19 @@ class MoveAndChangeController extends Controller
             // Обновляем значение поля "status"
             $item->status = 2; // Замените 2 на нужное значение для подтвержденного статуса
             $item->save();
+
+            $actual = in_messages::where('id_product', $id)->delete();
+
         }
 
         // Перенаправляем обратно на предыдущую страницу
         return back();
     }
 
-    public function refuseStatus($id)
+    public function refuseStatus(Request $request, $id)
     {
         // Находим запись по ID
-        $item = in_product_lists::where('id_product', $id)->firstOrFail();
+        $item = in_product_lists::where('id_product', $id)->first();
 
         $adminTutorID = [646, 359];
         // Проверяем, является ли текущий пользователь администратором
@@ -135,10 +141,19 @@ class MoveAndChangeController extends Controller
             // Обновляем значение поля "status"
             $item->status = 3; // Замените 2 на нужное значение для подтвержденного статуса
             $item->save();
+
+            // Создаем новую запись в таблице in_messages
+            $message = new in_messages();
+            $message->message = $request->input('message');
+            $message->TutorID = $request->input('redactor_id');
+            $message->inv_number = $request->input('inv_number');
+            $message->id_name = $request->input('id_name');
+            $message->id_product = $request->input('id_product');
+            $message->save();
         }
 
         // Перенаправляем обратно на предыдущую страницу
-        return back();
+        return back()->with('info', 'Отправлен на доработку');
     }
 
     public function change_tutor(){
@@ -204,7 +219,9 @@ class MoveAndChangeController extends Controller
             'auditoryID' => $request->input('auditoryID'),
             'TutorID' => $request->input('TutorID'),
             'type' => $request->input('type'),
-            'inv_number' => $request->input('inv_number')
+            'inv_number' => $request->input('inv_number'),
+            'status' => 1,
+            'redactor_id'=> Auth::user()->TutorID,
         ]);
 
         in_product_lists::where('id_product', $id_product)->update(['actual_inventory' => 0]);
@@ -238,10 +255,12 @@ class MoveAndChangeController extends Controller
         $results = DB::table('in_product_lists')
             ->where('id_name', $id_name)
             ->join('auditories', 'in_product_lists.auditoryID', '=', 'auditories.auditoryID')
-            ->join('tutors', 'in_product_lists.TutorID', '=', 'tutors.TutorID')
+            ->join('tutors AS tutor', 'in_product_lists.TutorID', '=', 'tutor.TutorID')
+            ->join('tutors AS redactor', 'in_product_lists.redactor_id', '=', 'redactor.TutorID')
             ->select(
                 'auditories.auditoryName',
-                DB::raw("CONCAT(tutors.lastname, ' ', tutors.firstname) AS tutor_fullname"),
+                DB::raw("CONCAT(tutor.lastname, ' ', tutor.firstname) AS tutor_fullname"),
+                DB::raw("CONCAT(redactor.lastname, ' ', redactor.firstname) AS redactor_fullname"),
                 'in_product_lists.updated_at'
             )
             ->orderBy('updated_at', 'ASC')

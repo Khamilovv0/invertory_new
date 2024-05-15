@@ -8,6 +8,7 @@ use App\Models\in_list_characteristics;
 use App\Models\in_product_lists;
 use App\Models\in_characteristics_for_product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Auditory;
 
@@ -52,7 +53,8 @@ class DitInvertoryController extends Controller
             'auditoryID' => $request->input('auditoryID'),
             'TutorID' => $request->input('TutorID'),
             'type' => $request->input('type'),
-            'inv_number' => $request->input('inv_number')
+            'inv_number' => $request->input('inv_number'),
+            'redactor_id' => Auth::user()->TutorID,
         ]);
 
         // Вставка значений в таблицу in_characteristics_for_product

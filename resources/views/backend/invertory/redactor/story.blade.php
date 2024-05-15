@@ -29,7 +29,11 @@
                                                 <i class="fas fa-arrow-down bg-blue"></i>
                                                 <div class="timeline-item">
                                                     <span class="time"><i class="fas fa-clock"></i> {{$result->updated_at}}</span>
-                                                    <h3 class="timeline-header"><a href="#">Кабинет №{{$result->auditoryName}}</a><br><strong>Ответственное лицо:</strong> &nbsp {{$result->tutor_fullname}}</h3>
+                                                    <h3 class="timeline-header"><a href="#">Местоположение: {{$result->auditoryName}}</a><br>
+                                                        <strong>Ответственное лицо:</strong> &nbsp {{$result->tutor_fullname}}
+                                                        <br>
+                                                        <strong>Редактор:</strong> &nbsp {{$result->redactor_fullname}}
+                                                    </h3>
                                                 </div>
                                             </div>
                                         @endforeach

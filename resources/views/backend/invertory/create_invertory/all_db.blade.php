@@ -9,7 +9,7 @@
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
-                    <table id="example1" class="table table-bordered table-striped" style="font-size: 15px !important">
+                    <table id="example1" class="table table-bordered table-striped" style="font-size: 13px !important">
                         @php
 
                             $adminTutorID = [646, 359];
@@ -25,6 +25,7 @@
                             <th>Назначение</th>
                             <th>Характеристика</th>
                             <th>Дата редактирования</th>
+                            <th>Последний редактор</th>
                             <th>Редактирование</th>
                             <th>Статус</th>
                             @if (in_array(Auth::user()->TutorID, $adminTutorID))
@@ -58,11 +59,18 @@
                                     @endforeach
                                 </td>
                                 <td align="center"><p >{{$formattedDate}}</p></td>
+                                <td>
+                                    @if($item->redactor_fullname)
+                                        {{ $item->redactor_fullname }}
+                                    @else
+                                        <h6 style="color: #7f8c8d">Нет данных</h6>
+                                    @endif
+                                </td>
                                 <td align="center"><a href="{{route('editAll', $item->id_product)}}" class="btn-sm  btn-danger">Редактировать</a></td>
                                 <td>
 
                                     @if($item->status == 1)
-                                        <span class="badge bg-warning">На проверке</span>
+                                        <span class="badge bg-warning">Отправлено.<br>На проверке</span>
                                     @elseif($item->status == 2)
                                         <span class="badge bg-success">Подтверждено</span>
                                     @elseif($item->status == 3)
@@ -77,10 +85,16 @@
                                             <button class="btn btn-block btn-info" type="submit">Подтвердить</button>
                                         </form>
                                         <br>
-                                        <form action="{{ route('refuseStatus', ['id' => $item->id_product]) }}" method="POST">
-                                            @csrf
-                                            <button class="btn btn-block btn-danger" type="submit">Отказать</button>
-                                        </form>
+                                        <button class="btn btn-block btn-danger" data-toggle="modal" data-target="#modal-lg"
+                                                onclick="fillModal('{{ $item->inv_number }}',
+                                                                   '{{ $item->redactor_id }}',
+                                                                   '{{ $item->id_name }}',
+                                                                   '{{ $item->id_product }}')">
+                                            Отказать
+                                        </button>
+                                        <!-- Модальное окно -->
+
+                                        <!-- /.modal -->
                                     </td>
                                 @endif
                             </tr>
@@ -96,6 +110,7 @@
                             <th>Назначение</th>
                             <th>Характеристика</th>
                             <th>Дата редактирования</th>
+                            <th>Последний редактор</th>
                             <th>Редактирование</th>
                             <th>Статус</th>
                             @if (in_array(Auth::user()->TutorID, $adminTutorID))
@@ -111,4 +126,43 @@
             <!-- /.card -->
         </div>
     </div>
+    <div class="modal fade" id="modal-lg">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Причина</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{ route('refuseStatus', ['id' => $item->id_product]) }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <label for="message">Укажите причину отказа</label>
+                        <textarea class="form-control" type="text" name="message" id="message" placeholder="Напишите причину..."></textarea>
+                    </div>
+                    <!-- Скрытые поля для передачи данных строки -->
+                    <input hidden name="inv_number" id="inv_number">
+                    <input hidden name="redactor_id" id="redactor_id">
+                    <input hidden name="id_product" id="id_product">
+                    <input hidden name="id_name" id="id_name">
+                    <div class="card-body">
+                        <button class="btn btn-primary" type="submit">Отправить</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <script>
+        function fillModal(invNumber, redactorId, id_name, id_product) {
+            // Находим скрытые поля в модальном окне и устанавливаем им значения
+            document.getElementById('inv_number').value = invNumber;
+            document.getElementById('redactor_id').value = redactorId;
+            document.getElementById('id_name').value = id_name;
+            document.getElementById('id_product').value = id_product;
+        }
+    </script>
 @endsection
