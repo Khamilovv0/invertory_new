@@ -56,12 +56,12 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="inv_number">Инвертарный номер</label>
+                                            <label for="inv_number">Инвентарный номер</label>
                                             <input type="text" name="inv_number"  class="form-control"
                                                    id="inv_number" placeholder="Введите номер" required readonly value="{{$edit->inv_number}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="category">Инвертарь</label>
+                                            <label for="category">Инвентарь</label>
                                             <select id="id_name" name="id_name" class="form-control" readonly>
                                                 <option value="{{$edit->id_name}}">{{$edit->name_product}}</option>
                                             </select>

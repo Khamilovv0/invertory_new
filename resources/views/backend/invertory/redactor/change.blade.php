@@ -18,7 +18,7 @@
                 <!-- general form elements -->
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Поиск по инвертарьному номеру</h3>
+                        <h3 class="card-title">Поиск по инвентарному номеру</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
@@ -28,7 +28,7 @@
                                 <div class="col-sm">
                                     <div class="card-body">
                                         <div class="form-group">
-                                            <label for="search">Введите инвертарьный номер</label>
+                                            <label for="search">Введите инвентарный номер</label>
                                             <input id="search" class="form-control" type="text" name="query" placeholder="Введите запрос..." value="">
                                         </div>
                                     </div>
