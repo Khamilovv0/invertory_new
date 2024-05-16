@@ -20,7 +20,7 @@
         <a href="#" class="nav-link">
             <i class="nav-icon fas fa-table"></i>
             <p>
-                Добавление  инвертаря
+                Добавление  инвентаря
                 <i class="fas fa-angle-left right"></i>
             </p>
         </a>

@@ -15,7 +15,7 @@
                 <!-- general form elements -->
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Добавить инвертарь</h3>
+                        <h3 class="card-title">Добавить инвентарь</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
@@ -72,7 +72,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="inv_number">Инвертарный номер</label>
+                                            <label for="inv_number">Инвентарный номер</label>
                                             <input type="text" name="inv_number"  class="form-control"
                                                    id="inv_number" placeholder="Введите номер" required>
                                         </div>
