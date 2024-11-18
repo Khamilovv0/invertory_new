@@ -19,4 +19,15 @@ class in_product_lists extends Model
         return $this->hasMany(in_characteristics_for_product::class, 'id_product', 'id_product');
     }
 
+    protected $fillable = [
+        'inv_number',
+        'status',
+        'current_status',
+        'actual_inventory',
+        'auditoryID',
+        'buildingID',
+        'id_name',
+        'type',
+    ];
+
 }

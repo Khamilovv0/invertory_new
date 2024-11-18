@@ -32,6 +32,12 @@
                 </a>
             </li>
             {{--<li class="nav-item">
+                <a href="{{route('importExcel')}}" class="nav-link">
+                    <i class="fa fa-file-excel nav-icon"></i>
+                    <p>Импорт через Excel</p>
+                </a>
+            </li>--}}
+            {{--<li class="nav-item">
                 <a href="{{route('createDahr')}}" class="nav-link">
                     <i class="far fa-building nav-icon"></i>
                     <p>ДАХР</p>
@@ -40,10 +46,39 @@
         </ul>
     </li>
     <li class="nav-item">
-        <a href="{{route('all')}}" class="nav-link">
+        <a href="#" class="nav-link">
             <i class="nav-icon fas fa-database"></i>
-            <p>Общая база</p>
+            <p>
+                Просмотр базы
+                <i class="fas fa-angle-left right"></i>
+            </p>
         </a>
+        <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{{route('all')}}" class="nav-link">
+                    <i class="nav-icon fas fa-globe"></i>
+                    <p>Общая база</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{route('filter')}}" class="nav-link">
+                    <i class="nav-icon fas fa-filter"></i>
+                    <p>Распределенные</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{route('noSorted')}}" class="nav-link">
+                    <i class="nav-icon fas fa-times-circle"></i>
+                    <p>Не распределенные</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{route('noNumber')}}" class="nav-link">
+                    <i class="nav-icon fa fa-outdent"></i>
+                    <p>Без инвентарного номера</p>
+                </a>
+            </li>
+        </ul>
     </li>
     <li class="nav-item">
         <a href="{{route('change_tutor')}}" class="nav-link">
@@ -58,6 +93,30 @@
 
     @endphp
     @if (in_array(Auth::user()->TutorID, $adminTutorID))
+
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-bars"></i>
+                <p>
+                    Списание
+                    <i class="fas fa-angle-left right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{route('write_off')}}" class="nav-link">
+                        <i class="nav-icon fa fa-ban"></i>
+                        <p>Списание инвентаря</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{route('write_off_list')}}" class="nav-link">
+                        <i class="fa fa-database nav-icon"></i>
+                        <p>База списанного инвентаря</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
         <li class="nav-item">
             <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-cog"></i>

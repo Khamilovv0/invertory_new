@@ -71,44 +71,66 @@ class MoveAndChangeController extends Controller
         return view('backend.invertory.redactor.change');
     }
 
-    public function updateAll(Request $request,$id_product)
+    public function updateAll(Request $request, $id_product)
     {
-        DB::table('in_product_lists')->where('id_product', $id_product)->first();
-        $data = array();
-        $data['buildingID'] = $request->buildingID;
-        $data['auditoryID'] = $request->auditoryID;
-        $data['TutorID'] = $request->TutorID;
-        $data['status'] = 1;
-        $data['redactor_id'] = Auth::user()->TutorID;
+        // Валидация входящих данных
+        $request->validate([
+            'buildingID' => 'required',
+            'auditoryID' => 'required',
+            'TutorID' => 'required',
+            'names' => 'required|array',
+            'id_characteristic' => 'required|array',
+        ]);
 
-        $update = DB::table('in_product_lists')->where('id_product', $id_product)->update($data);
+        DB::beginTransaction(); // Начинаем транзакцию
 
-
-        $values = $request->names;
-        $id_characteristics = $request->id_characteristic;
-
-        foreach ($values as $index => $value) {
-            $id_characteristic = $id_characteristics[$index];
-
-            // Находим соответствующую характеристику
-            $characteristic = in_characteristics_for_product::where('id_product', $id_product)
-                ->where('id_characteristic', $id_characteristic)
-                ->first();
-
-            // Если характеристика найдена, обновляем ее значение
-            if ($characteristic) {
-                $characteristic->update(['characteristic_value' => $value]);
-            } else {
-                // Иначе, вставляем новую запись
-                in_characteristics_for_product::insert([
-                    'id_product' => $id_product,
-                    'id_characteristic' => $id_characteristic,
-                    'characteristic_value' => $value,
-                ]);
+        try {
+            // Проверка на существование записи
+            $productList = DB::table('in_product_lists')->where('id_product', $id_product)->first();
+            if (!$productList) {
+                return redirect()->back()->with('error', 'Запись не найдена!');
             }
+
+            // Подготовка данных для обновления
+            $data = [
+                'buildingID' => $request->buildingID,
+                'auditoryID' => $request->auditoryID,
+                'type' => $request->type,
+                'TutorID' => $request->TutorID,
+                'status' => 1,
+                'redactor_id' => Auth::user()->TutorID,
+            ];
+
+            // Обновление записи в таблице `in_product_lists`
+            DB::table('in_product_lists')->where('id_product', $id_product)->update($data);
+
+                DB::transaction(function () use ($id_product, $request) {
+                    // Сначала обновляем записи с тем же id_product, устанавливая current_status в 1
+                    in_characteristics_for_product::where('id_product', $id_product)
+                        ->update(['current_status' => 1]);
+
+                    // Вставляем каждую запись по отдельности
+                    foreach ($request->names as $index => $value) {
+                        $id_characteristic = $request->id_characteristic[$index];
+
+                        in_characteristics_for_product::insert([
+                            'current_status' => 0,
+                            'id_product' => $id_product,
+                            'id_characteristic' => $id_characteristic,
+                            'characteristic_value' => $value,
+                        ]);
+                    }
+                });
+
+            DB::commit(); // Завершаем транзакцию
+            return redirect()->route('all')->with('success', 'Инвентаризация успешно обновлена!');
+
+        } catch (\Exception $e) {
+            DB::rollBack(); // Откатываем транзакцию в случае ошибки
+            return redirect()->back()->with('error', 'Произошла ошибка: ' . $e->getMessage());
         }
-        return redirect()->route('all')->with('success','Инвертаризация успешна обновлена!');
     }
+
 
     public function confirmStatus($id)
     {
@@ -169,7 +191,7 @@ class MoveAndChangeController extends Controller
 
         // Выполняем поиск в таблице InProductList по полю inv_number
         $products = in_product_lists::with(['characteristics' => function ($query) {
-            $query->with('characteristic');
+            $query->with('characteristic')->where('current_status', '0');
         }])
             ->leftJoin('auditories', 'in_product_lists.auditoryID', '=', 'auditories.auditoryID')
             ->leftJoin('buildings', 'in_product_lists.buildingID', '=', 'buildings.buildingID')
@@ -247,7 +269,7 @@ class MoveAndChangeController extends Controller
 
         }
 
-        return redirect()->route('all')->with('success','Перемещение успешно совершено!');
+        return redirect()->back()->with('success','Перемещение успешно совершено!');
     }
 
     public function story($id_name){
@@ -269,7 +291,11 @@ class MoveAndChangeController extends Controller
         return view('backend.invertory.redactor.story', compact('results'));
     }
 
+    /*public function writeOff($id_product)
+    {
+        in_product_lists::where('id_product', $id_product)->update(['write_off' => 0]);
 
-
+        return back()->with('success', 'Инвертарь успешно списан');
+    }*/
 
 }

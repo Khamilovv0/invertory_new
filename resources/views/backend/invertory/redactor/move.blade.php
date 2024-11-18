@@ -65,6 +65,33 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-sm">
+                                    <div class="card-body">
+                                        <ul>
+                                            @php
+                                                // Сортируем характеристики по дате добавления и группируем по этой дате
+                                                $groupedCharacteristics = $edit->characteristics
+                                                    ->sortBy('created_at') // Сортируем по дате добавления
+                                                    ->groupBy(function($characteristic) {
+                                                        return \Carbon\Carbon::parse($characteristic->created_at)->format('d.m.y');
+                                                    });
+                                            @endphp
+
+                                            @foreach($groupedCharacteristics as $date => $characteristics)
+                                                <!-- Выводим дату -->
+                                                <h5>{{ $date }}</h5>
+
+                                                @foreach($characteristics as $characteristic)
+                                                    <ol>
+                                                        <strong>{{ $characteristic->characteristic->name_characteristic }}:</strong> {{ $characteristic->characteristic_value }};
+                                                        <br>
+                                                    </ol>
+                                                @endforeach
+                                            @endforeach
+
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!-- /.card-body -->

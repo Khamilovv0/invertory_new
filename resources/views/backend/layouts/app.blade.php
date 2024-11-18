@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="{{asset('backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
     <link rel="stylesheet" href="{{asset('backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
     <link rel="stylesheet" href="{{asset('backend/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
+    <link rel="stylesheet" href="{{asset('backend/plugins/datatables-buttons/css/buttons.dataTables.css')}}">
+    <link rel="stylesheet" href="{{asset('backend/plugins/datatables-buttons/css/dataTables.dataTables.css')}}">
+    <link rel="stylesheet" href="{{asset('backend/plugins/datatables/select.dataTables.min.css">')}}">
     <link href="{{asset('backend/dist/css/select2.min.css')}}" rel="stylesheet" />
     <!-- End Datatables -->
     <!-- Toster and Sweet Alert -->
@@ -79,143 +82,13 @@
     <script src="{{asset('backend/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
     <script src="{{asset('backend/plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
     <script src="{{asset('backend/plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
+    <script src="{{asset('backend/plugins/datatables-buttons/js/buttons.min.js')}}"></script>
     <script src="{{asset('backend/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
+    <script src="{{asset('backend/plugins/datatables-buttons/js/buttons.print.js')}}"></script>
     <script src="{{asset('backend/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
+    <script src="{{asset('backend/plugins/datatables-buttons/js/buttons.dataTables.js')}}"></script>
     <script src="{{asset('backend/dist/js/select2.min.js')}}"></script>
-    <script>
-        $(document).ready(function() {
-            $('#tutor').select2();
-        });
-
-          $(function () {
-            $("#example1").DataTable({
-              "responsive": true,
-              "autoWidth": false,
-            });
-            $('#example2').DataTable({
-              "paging": true,
-              "lengthChange": false,
-              "searching": false,
-              "ordering": true,
-              "info": true,
-              "autoWidth": false,
-              "responsive": true,
-            });
-          });
-        </script>
-    <!-- End Datatables -->
-         <script>
-             $(document).on("click", "#delete", function(e){
-                 e.preventDefault();
-                 var link = $(this).attr("href");
-                    swal({
-                      title: "Are you Want to delete?",
-                      text: "Once Delete, This will be Permanently Delete!",
-                      icon: "warning",
-                      buttons: true,
-                      dangerMode: true,
-                    })
-                    .then((willDelete) => {
-                      if (willDelete) {
-                           window.location.href = link;
-                      } else {
-                        swal("Safe Data!");
-                      }
-                    });
-                });
-
-             function readURL(input) {
-                 if (input.files && input.files[0]) {
-                     var reader = new FileReader();
-                     reader.onload = function (e) {
-                         $('#image')
-                             .attr('src', e.target.result)
-                             .width(80)
-                             .height(80);
-                     };
-                     reader.readAsDataURL(input.files[0]);
-                 }
-             }
-             document.addEventListener('DOMContentLoaded', function() {
-                 var id_name = document.getElementById('id_name');
-                 id_name.addEventListener('change', function() {
-                     var selectedProductId = this.value;
-                     fetchForm(selectedProductId);
-                 });
-             });
-             function fetchForm(id_name) {
-                 fetch('/get-product-form/' + id_name)
-                     .then(response => response.json())
-                     .then(data => {
-                         const container = document.getElementById('product-form-container');
-                         container.innerHTML = ''; // Очищаем контейнер перед добавлением нового содержимого
-
-                         // Создаем массив для хранения id_characteristic
-                         let idCharacteristics = [];
-
-                         // Добавляем каждый id_characteristic в массив
-                         data.forms.forEach(form => {
-                             const formContainer = document.createElement('div');
-                             formContainer.innerHTML = form.input_characteristic;
-                             container.appendChild(formContainer);
-
-                             const hiddenInput = document.createElement('input');
-                             hiddenInput.type = 'hidden';
-                             hiddenInput.name = 'id_characteristic[]'; // Обратите внимание на квадратные скобки []
-                             hiddenInput.value = form.id_characteristic;
-                             formContainer.appendChild(hiddenInput);
-
-                             // Добавляем id_characteristic в массив
-                             idCharacteristics.push(form.id_characteristic);
-                         });
-                         // Отправляем массив id_characteristic на сервер
-                         fetch('/save-data', {
-                             method: 'POST',
-                             headers: {
-                                 'Content-Type': 'application/json',
-                             },
-                             body: JSON.stringify({ id_characteristics: idCharacteristics }),
-                         })
-                             .then(response => response.json())
-                             .then(data => console.log(data))
-                             .catch(error => console.error('Ошибка:', error));
-                     })
-                     .catch(error => console.error('Ошибка:', error));
-             }
-             document.getElementById('myForm').addEventListener('submit', function(e) {
-                 e.preventDefault();
-
-                 const formData = new FormData(this);
-                 const values = formData.getAll('values[]');
-
-                 fetch('/dit_create/addAll', {
-                     method: 'POST',
-                     headers: {
-                         'Content-Type': 'application/json',
-                         'X-CSRF-TOKEN': csrfToken // CSRF токен Laravel
-                     },
-                     body: JSON.stringify({ values })
-                 })
-                     .then(response => response.json())
-                     .then(data => console.log(data))
-                     .catch(error => console.error('Ошибка:', error));
-             });
-             document.getElementById('searchInput').addEventListener('input', function() {
-                 var searchQuery = this.value.toLowerCase();
-                 var selectElement = document.getElementById('mySelect');
-                 var options = selectElement.options;
-
-                 for (var i = 0; i < options.length; i++) {
-                     var option = options[i];
-                     var optionText = option.text.toLowerCase();
-                     var isMatch = optionText.indexOf(searchQuery) >= 0;
-                     option.style.display = isMatch ? '' : 'none';
-                 }
-             });
-             $(document).ready(function() {
-                 $('#tutor').select2();
-             });
-        </script>
+    <script src="{{asset('backend/dist/js/app.js')}}"></script>
     <!-- <script src="{{ asset('backend/js/toastr.min.js')}}"></script> -->
     <script src="{{ asset('backend/js/sweetalert.min.js') }}"></script>
     <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>

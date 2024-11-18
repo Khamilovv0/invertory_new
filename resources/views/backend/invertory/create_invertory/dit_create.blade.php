@@ -74,7 +74,16 @@
                                         <div class="form-group">
                                             <label for="inv_number">Инвентарный номер</label>
                                             <input type="text" name="inv_number"  class="form-control"
-                                                   id="inv_number" placeholder="Введите номер" required>
+                                                   id="inv_number" placeholder="Введите номер">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="quantity">Количество</label>
+                                            <br>
+                                            <input id="quantity" class="form-control" type="number" name="quantity" placeholder="Введите количество">
                                         </div>
                                     </div>
                                 </div>
