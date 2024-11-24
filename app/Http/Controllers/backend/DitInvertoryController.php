@@ -71,6 +71,7 @@ class DitInvertoryController extends Controller
                 $id_characteristic = $id_characteristics[$index];
 
                 in_characteristics_for_product::insert([
+                    'current_status' => 0,
                     'id_product' => $id,
                     'id_characteristic' => $id_characteristic,
                     'characteristic_value' => $value,

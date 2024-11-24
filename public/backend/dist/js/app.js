@@ -1,8 +1,5 @@
-$(document).ready(function() {
-    $('#tutor').select2();
-});
-$(document).ready(function() {
-    $('#recordSelect').select2();
+$(document).ready(function () {
+    $('#tutor, #auditory, #head, #recordSelect').select2();
 });
 
 $(function () {

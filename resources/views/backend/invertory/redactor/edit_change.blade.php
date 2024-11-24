@@ -47,8 +47,8 @@
                                         </div>
                                         <br>
                                         <div class="form-group">
-                                            <label for="TutorID">Инвентарь</label>
-                                            <select id="TutorID" name="TutorID" class="form-control">
+                                            <label for="tutor">Инвентарь</label>
+                                            <select id="tutor" name="TutorID" class="form-control">
                                                 <option value="">Выберите ответственное лицо</option>
                                                 @foreach($tutor as $tutors)
                                                     <option value="{{$tutors->TutorID}}">{{$tutors->lastname}} {{$tutors->firstname}}</option>

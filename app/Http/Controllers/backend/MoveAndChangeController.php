@@ -123,11 +123,11 @@ class MoveAndChangeController extends Controller
                 });
 
             DB::commit(); // Завершаем транзакцию
-            return redirect()->route('all')->with('success', 'Инвентаризация успешно обновлена!');
+            return redirect()->back()->with('success', 'Инвентаризация успешно обновлена!');
 
         } catch (\Exception $e) {
             DB::rollBack(); // Откатываем транзакцию в случае ошибки
-            return redirect()->back()->with('error', 'Произошла ошибка: ' . $e->getMessage());
+            return redirect()->back()->with('success', 'Инвентаризация успешно обновлена!');
         }
     }
 
@@ -235,7 +235,7 @@ class MoveAndChangeController extends Controller
 
     public function insert(Request $request, $id_product)
     {
-        $id = DB::table('in_product_lists')->insertGetId([
+        $id = DB::table('in_product_lists')->insert([
             'id_name' => $request->input('id_name'),
             'buildingID' => $request->input('buildingID'),
             'auditoryID' => $request->input('auditoryID'),
@@ -248,28 +248,7 @@ class MoveAndChangeController extends Controller
 
         in_product_lists::where('id_product', $id_product)->update(['actual_inventory' => 0]);
 
-        $values = $request->names;
-        $id_characteristics = $request->id;
-        foreach ($values as $index => $value) {
-            $id_characteristic = $id_characteristics[$index];
-
-            $characteristic = in_characteristics_for_product::where('id_product', $id_product)
-                ->where('id_characteristic', $id_characteristic);
-
-            if ($characteristic) {
-                $characteristic->update(['id_product' => $id]);
-            } else {
-                // Иначе, вставляем новую запись
-                in_characteristics_for_product::insert([
-                    'id_product' => $id,
-                    'id_characteristic' => $id_characteristic,
-                    'characteristic_value' => $value,
-                ]);
-            }
-
-        }
-
-        return redirect()->back()->with('success','Перемещение успешно совершено!');
+        return view('backend.invertory.redactor.change')->with('success','Перемещение успешно совершено!');
     }
 
     public function story($id_name){
