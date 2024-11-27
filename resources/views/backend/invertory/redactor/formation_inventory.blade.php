@@ -22,7 +22,7 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="auditory">Введите номер аудитории</label>
-                                <select id="auditory" name="auditoryID" class="form-control">
+                                <select id="auditory" name="auditoryID" class="form-control" required>
                                     <option value="">Выберите аудиторию</option>
                                     @foreach($auditories as $auditory)
                                         <option value="{{$auditory->auditoryID}}">{{$auditory->auditoryName}}</option>

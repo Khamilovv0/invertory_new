@@ -35,6 +35,7 @@
 <div>
     <div class="header">
         <p style="font-size: 13px">Министерство науки и высшего образования Республики Казахстан</p>
+        <br>
         <table class="center">
             <tr>
                 <th><img src="{{$imageBase64}}" style="width: 100px"></th>
@@ -121,7 +122,7 @@
                     $nameParts = explode(' ', $head_d->fio_rus);
 
                     // Формируем сокращенный формат
-                    $shortName = $nameParts[0] . ' ' . mb_substr($nameParts[1] ?? '', 0, 1) . '.';
+                    $shortName = $nameParts[0] . ' ' . mb_substr($nameParts[1] ?? '', 0, 1) . '.' . mb_substr($nameParts[2] ?? '', 0, 1) . '.';
                 @endphp
                 <tr>
                     <td>{{$head_d->name_job_rus}}:</td>
@@ -133,7 +134,7 @@
             <tr>
                 <td>Директор департамента информационных технологий:</td>
                 <td></td>
-                <td> Шындалы С.</td>
+                <td> Шындалы С.Б.</td>
             </tr>
             <br>
             <tr>
