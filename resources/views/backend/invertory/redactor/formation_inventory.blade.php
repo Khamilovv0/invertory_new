@@ -40,6 +40,7 @@
 
                                 @endphp
                                 <label for="head">Выберите ФИО зав. кафедры</label>
+                                <p style="color: #ff2e2e">Если вы представляете Академическое подразделение, то оставьте поле пустым</p>
                                 <select id="head" name="head" class="form-control">
                                     <option value=""> </option>
                                     @foreach($cafedra as $head)

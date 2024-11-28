@@ -32,6 +32,15 @@
     </style>
 </head>
 <body>
+@php
+    $info = \Illuminate\Support\Facades\DB::connection('mysql_ais')
+            ->table('db_users_profiles')
+            ->leftJoin('db_users', 'db_users_profiles.user_login', '=', 'db_users.user_login')
+            ->leftJoin('db_jobs', 'db_users_profiles.id_job', '=', 'db_jobs.id_job')
+            ->leftJoin('db_organigramme', 'db_users_profiles.division_id', '=', 'db_organigramme.division_id')
+            ->whereIn('db_users_profiles.id_job', [20, 5, 36])
+            ->get();
+@endphp
 <div>
     <div class="header">
         <p style="font-size: 13px">Министерство науки и высшего образования Республики Казахстан</p>
@@ -43,13 +52,6 @@
             </tr>
         </table>
     </div>
-    @php
-        $info = \Illuminate\Support\Facades\DB::connection('mysql_ais')
-                ->table('db_users_profiles')
-                ->leftJoin('db_users', 'db_users_profiles.user_login', '=', 'db_users.user_login')
-                ->leftJoin('db_jobs', 'db_users_profiles.id_job', '=', 'db_jobs.id_job')
-                ->get();
-    @endphp
     <div class="approved">
         «Утверждаю»:<br>
         Проректор по АРиМС<br>
@@ -129,19 +131,34 @@
                     <td></td>
                     <td>{{$shortName }}</td>
                 </tr>
-                <br>
             @endforeach
+            <br>
             <tr>
                 <td>Директор департамента информационных технологий:</td>
                 <td></td>
-                <td> Шындалы С.Б.</td>
+                @foreach($info->where('division_id', 3) as $dit)
+                @php
+                    $nameParts = explode(' ', $dit->fio_rus);
+
+                    $shortName = $nameParts[0] . ' ' . mb_substr($nameParts[1] ?? '', 0, 1) . '.' . mb_substr($nameParts[2] ?? '', 0, 1) . '.';
+                @endphp
+                <td>
+                    {{ $shortName }}
+                </td>
+                @endforeach
+
             </tr>
             <br>
             <tr>
                 <td>Ответственный за аудиторию:</td>
                 <td></td>
                 @foreach($items->unique('lastname') as $item)
-                <td>{{$item->lastname}}&nbsp;{{ $item->firstname}}</td>
+                    @php
+                        $nameParts = explode(' ', $item->firstname);
+
+                        $shortName = mb_substr($nameParts[0] ?? '', 0, 1) . '.';
+                    @endphp
+                <td>{{$item->lastname}}&nbsp;{{$shortName}}</td>
                 @endforeach
             </tr>
             </tbody>
