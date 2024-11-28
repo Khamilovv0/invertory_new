@@ -115,7 +115,7 @@
             <tr>
                 <td>Директор департамента по административно-хозяйственным <br>работам:</td>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                <td> Кузанов Х.</td>
+                <td> Кузанов Х.С.</td>
             </tr>
             <br>
             @foreach($info->where('fio_rus', $head) as $head_d)
