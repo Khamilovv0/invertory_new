@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\DB;
 class ToPdfController extends Controller
 {
     public function open_pdf() {
-        $auditories = DB::table('auditories')->orderBy('buildingID')->get();
+        $auditories = DB::table('auditories')->get();
 
-        return view('backend.invertory.redactor.formation_inventory', ['auditories' => $auditories]);
+        $sortedAuditories = $auditories->sortBy('auditoryName');
+
+        return view('backend.invertory.redactor.formation_inventory', ['auditories' => $sortedAuditories]);
     }
 
 }
