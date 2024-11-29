@@ -12,7 +12,6 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 
 // Auth::routes();
-Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
     Route::get('/login', [LoginController::class, 'login'])->name('login');
@@ -122,4 +121,3 @@ Route::middleware(['auth'])->group(function () {
 
         return $pdf->stream('document.pdf'); // Открыть PDF в браузере
     });
-});

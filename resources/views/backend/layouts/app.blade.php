@@ -24,49 +24,64 @@
     <!-- End Toaster and Sweet Alert-->
     <!-- Theme style -->
     <link rel="stylesheet" href="{{asset('backend/dist/css/adminlte.min.css')}}">
+    <!-- Яндекс метрика -->
+    <script type="text/javascript" >
+        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+        ym(99075707, "init", {
+            clickmap:true,
+            trackLinks:true,
+            accurateTrackBounce:true
+        });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/99075707" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 </head>
 <body class="hold-transition sidebar-mini">
-    <div class="wrapper">
-      <!-- Navbar -->
-      <nav class="main-header navbar navbar-expand navbar-light">
+<div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-light">
         <!-- Left navbar links -->
         <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </ul>
         <!-- Right navbar links -->
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-              <a class="dropdown-item" href="{{ route('logout') }}"
-                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                  &nbsp&nbsp Выйти &nbsp
-                  <i class="nav-icon fa fa-sign-out-alt"></i>&nbsp&nbsp
-              </a>
-              <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                  @csrf
-              </form>
-          </li>
+            <li class="nav-item">
+                <a class="dropdown-item" href="{{ route('logout') }}"
+                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    &nbsp&nbsp Выйти &nbsp
+                    <i class="nav-icon fa fa-sign-out-alt"></i>&nbsp&nbsp
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+            </li>
         </ul>
-      </nav>
-      <!-- /.navbar -->
-      <!-- Main Sidebar Container -->
-      @include('backend.layouts.sidebar')
-      <!-- End Main Sidebar Container -->
-      <!-- Content Wrapper. Contains page content -->
-      <div class="content-wrapper">
-      <br>
+    </nav>
+    <!-- /.navbar -->
+    <!-- Main Sidebar Container -->
+    @include('backend.layouts.sidebar')
+    <!-- End Main Sidebar Container -->
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <br>
         <!-- Main content -->
         <div class="content">
-          <div class="container-fluid">
-            @include('backend.flash-message')
-            @yield('content')
-          </div><!-- /.container-fluid -->
+            <div class="container-fluid">
+                @include('backend.flash-message')
+                @yield('content')
+            </div><!-- /.container-fluid -->
         </div>
         <!-- /.content -->
-      </div>
-      <!-- /.content-wrapper -->
-      <!-- Main Footer -->
-      @include('backend.layouts.footer')
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- Main Footer -->
+    @include('backend.layouts.footer')
 
     <!-- ./wrapper -->
 
