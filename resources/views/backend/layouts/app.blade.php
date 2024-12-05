@@ -82,9 +82,6 @@
     <!-- /.content-wrapper -->
     <!-- Main Footer -->
     @include('backend.layouts.footer')
-
-    <!-- ./wrapper -->
-
     <!-- REQUIRED SCRIPTS -->
     <!-- jQuery -->
     <script src="{{asset('backend/plugins/jquery/jquery.min.js')}}"></script>
@@ -104,7 +101,7 @@
     <script src="{{asset('backend/plugins/datatables-buttons/js/buttons.dataTables.js')}}"></script>
     <script src="{{asset('backend/dist/js/select2.min.js')}}"></script>
     <script src="{{asset('backend/dist/js/app.js')}}"></script>
-    <!-- <script src="{{ asset('backend/js/toastr.min.js')}}"></script> -->
+    <script src="{{ asset('backend/js/toastr.min.js')}}"></script>
     <script src="{{ asset('backend/js/sweetalert.min.js') }}"></script>
     <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
     <!-- End  Sweet Alert and Toaster notifications -->

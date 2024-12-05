@@ -131,8 +131,8 @@
                     <td></td>
                     <td>{{$shortName }}</td>
                 </tr>
+                <br>
             @endforeach
-            <br>
             <tr>
                 <td>Директор департамента информационных технологий:</td>
                 <td></td>
