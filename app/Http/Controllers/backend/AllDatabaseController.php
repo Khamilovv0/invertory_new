@@ -74,7 +74,7 @@ class AllDatabaseController extends Controller
             ->orderBy('id_product', 'desc')
             ->get();
 
-        return view('backend.invertory.create_invertory.filter', ['items' => $items]);
+        return view('backend.invertory.create_invertory.all_db', ['items' => $items]);
     }
 
     public function noSorted()
@@ -103,7 +103,7 @@ class AllDatabaseController extends Controller
                 ->orderBy('id_product', 'desc')
                 ->get();
 
-            return view('backend.invertory.create_invertory.noSorted', ['items' => $items]);
+            return view('backend.invertory.create_invertory.all_db', ['items' => $items]);
         }
 
     public function noNumber()
@@ -130,6 +130,6 @@ class AllDatabaseController extends Controller
             ->orderBy('id_product', 'desc')
             ->get();
 
-        return view('backend.invertory.create_invertory.noNumber', ['items' => $items]);
+        return view('backend.invertory.create_invertory.all_db', ['items' => $items]);
     }
 }

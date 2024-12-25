@@ -79,34 +79,74 @@
             <th>Характеристика</th>
             <th>Количество</th>
             <th>Инвентарный номер</th>
+            @php
+                $hasResponsiblePerson = $items->filter(function($item) {
+                    return $item->auditoryType == 2;
+                })->isNotEmpty();
+            @endphp
+
+            @if($hasResponsiblePerson)
+                <th>Ответственное лицо</th>
+            @endif
+
+
         </tr>
         </thead>
         @php
             // Группируем записи по product_name и характеристикам
             $groupedItems = $items->groupBy(function($item) {
-                return $item->product_name . $item->characteristics->where('current_status', 0)->map(function($characteristic) {
-                    return $characteristic->characteristic->name_characteristic . ':' . $characteristic->characteristic_value;
+                return $item->name_product . ' | ' . $item->characteristics->where('current_status', 0)->map(function($characteristic) {
+                    return $characteristic->characteristic->name_characteristic . ': ' . $characteristic->characteristic_value;
                 })->join('; ');
             });
         @endphp
+
         <tbody>
-        @php $counter = 1; @endphp <!-- Счетчик для порядковых номеров -->
+        @php $counter = 1; @endphp <!-- Счётчик для порядковых номеров -->
+
+        @foreach ($items as $item)
+            @if ($item->auditoryType == 2)
+                <tr>
+                    <td>{{ $counter++ }}</td> <!-- Порядковый номер -->
+                    <td>{{ $item->name_product }}</td> <!-- Название продукта -->
+                    <td>
+                        @foreach ($item->characteristics->where('current_status', 0) as $characteristic)
+                            {{ $characteristic->characteristic->name_characteristic }}: {{ $characteristic->characteristic_value }};
+                        @endforeach
+                    </td> <!-- Характеристики -->
+                    <td>1</td> <!-- Количество (по умолчанию 1 для отдельных записей) -->
+                    <td>{{ $item->inv_number }}</td> <!-- Инвентарный номер -->
+                    <td>Ответственное лицо</td> <!-- Ответственное лицо -->
+                </tr>
+            @endif
+        @endforeach
+
+        @php
+            // Группируем записи, у которых auditoryType равен 1
+            $groupedItems = $items->where('auditoryType', 1)->groupBy(function($item) {
+                return $item->name_product . ' | ' . $item->characteristics->where('current_status', 0)->map(function($characteristic) {
+                    return $characteristic->characteristic->name_characteristic . ': ' . $characteristic->characteristic_value;
+                })->join('; ');
+            });
+        @endphp
+
         @foreach ($groupedItems as $key => $group)
             @php
-                // Получаем название продукта непосредственно из первой записи группы
-                $productName = $group->first()->name_product;
-                $characteristics = $key; // Сохраняем характеристику из ключа
-                $invNumbers = $group->pluck('inv_number')->unique()->join(', '); // Собираем уникальные инвентарные номера
+                $productName = $group->first()->name_product; // Название продукта
+                $characteristics = explode(' | ', $key)[1]; // Характеристики
+                $invNumbers = $group->pluck('inv_number')->unique()->join(', '); // Уникальные инвентарные номера
             @endphp
             <tr>
-                <td>{{ $loop->iteration }}</td> <!-- Порядковый номер -->
-                <td>{{ $productName }}</td> <!-- Просто выводим название продукта -->
-                <td>{{ $characteristics }}</td> <!-- Характеристика -->
+                <td>{{ $counter++ }}</td> <!-- Порядковый номер -->
+                <td>{{ $productName }}</td> <!-- Название продукта -->
+                <td>{{ $characteristics }}</td> <!-- Характеристики -->
                 <td>{{ $group->count() }}</td> <!-- Количество записей в группе -->
                 <td>{{ $invNumbers }}</td> <!-- Инвентарные номера -->
+                <td>Не указано</td> <!-- Ответственное лицо (по умолчанию "Не указано") -->
             </tr>
         @endforeach
         </tbody>
+
     </table>
     <br>
     <div>

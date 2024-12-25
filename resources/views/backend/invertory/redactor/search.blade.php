@@ -15,6 +15,17 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-8">
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <!-- general form elements -->
                 <div class="card card-primary">
                     <div class="card-header">

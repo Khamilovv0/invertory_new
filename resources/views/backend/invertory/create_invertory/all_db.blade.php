@@ -97,11 +97,11 @@
                                 </td>
                                 <td>
 
-                                    @if($item->status == 1)
+                                    @if($item->verification_status == 1)
                                         <span class="badge bg-warning">Отправлено.<br>На проверке</span>
-                                    @elseif($item->status == 2)
+                                    @elseif($item->verification_status == 2)
                                         <span class="badge bg-success">Подтверждено</span>
-                                    @elseif($item->status == 3)
+                                    @elseif($item->verification_status == 3)
                                         <span class="badge bg-danger">Отказано</span>
                                     @endif
 

@@ -17,9 +17,9 @@
               	@csrf
                 <div class="card-body">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Название</label>
+                        <label for="name">Название</label>
                         <input type="text" name="name"  class="form-control @error('title') is-invalid @enderror"
-                         id="exampleInputEmail1" placeholder="Введите наименование">
+                         id="name" placeholder="Введите наименование">
 
                         @error('title')
                             <span class="invalid-feedback" role="alert">

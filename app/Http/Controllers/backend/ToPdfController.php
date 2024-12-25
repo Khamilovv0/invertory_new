@@ -47,6 +47,7 @@ class ToPdfController extends Controller
             )
             ->where('in_product_lists.actual_inventory', 1)
             ->where('in_product_lists.write_off', 1)
+            ->where('in_product_lists.verification_status', 2)
             ->orderBy('id_product', 'desc')
             ->get();
 

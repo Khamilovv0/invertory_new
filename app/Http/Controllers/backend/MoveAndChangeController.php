@@ -97,7 +97,7 @@ class MoveAndChangeController extends Controller
                 'auditoryID' => $request->auditoryID,
                 'type' => $request->type,
                 'TutorID' => $request->TutorID,
-                'status' => 1,
+                'verification_status' => 1,
                 'redactor_id' => Auth::user()->TutorID,
             ];
 
@@ -141,7 +141,7 @@ class MoveAndChangeController extends Controller
         // Проверяем, является ли текущий пользователь администратором
         if (in_array(Auth::user()->TutorID, $adminTutorID)) {
             // Обновляем значение поля "status"
-            $item->status = 2; // Замените 2 на нужное значение для подтвержденного статуса
+            $item->verification_status = 2; // Замените 2 на нужное значение для подтвержденного статуса
             $item->save();
 
             $actual = in_messages::where('id_product', $id)->delete();
@@ -161,7 +161,7 @@ class MoveAndChangeController extends Controller
         // Проверяем, является ли текущий пользователь администратором
         if (in_array(Auth::user()->TutorID, $adminTutorID)) {
             // Обновляем значение поля "status"
-            $item->status = 3; // Замените 2 на нужное значение для подтвержденного статуса
+            $item->verification_status = 3; // Замените 2 на нужное значение для подтвержденного статуса
             $item->save();
 
             // Создаем новую запись в таблице in_messages
@@ -242,7 +242,7 @@ class MoveAndChangeController extends Controller
             'TutorID' => $request->input('TutorID'),
             'type' => $request->input('type'),
             'inv_number' => $request->input('inv_number'),
-            'status' => 1,
+            'verification_status' => 1,
             'redactor_id'=> Auth::user()->TutorID,
         ]);
 

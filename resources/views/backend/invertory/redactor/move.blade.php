@@ -29,7 +29,7 @@
                                 <div class="col-sm">
                                     <div class="card-body">
                                         <div class="form-group">
-                                            <label for="category">Выберите товар</label>
+                                            <label for="category">Выберите инвентарь</label>
                                             <select id="id_name" name="id_name" class="form-control" required>
                                                     <option value="">Выбрать</option>
                                                     <option value="{{$edit->id_name}}">{{$edit->name_product}}</option>

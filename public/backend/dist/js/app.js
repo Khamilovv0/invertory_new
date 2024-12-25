@@ -45,7 +45,7 @@ $(function () {
     fetchForm(selectedProductId);
 });
 });
-    function fetchForm(id_name) {
+function fetchForm(id_name) {
     fetch('/get-product-form/' + id_name)
         .then(response => response.json())
         .then(data => {
@@ -55,7 +55,7 @@ $(function () {
             // Создаем массив для хранения id_characteristic
             let idCharacteristics = [];
 
-            // Добавляем каждый id_characteristic в массив
+            // Добавляем каждый id_characteristic в массив и в DOM
             data.forms.forEach(form => {
                 const formContainer = document.createElement('div');
                 formContainer.innerHTML = form.input_characteristic;
@@ -70,21 +70,36 @@ $(function () {
                 // Добавляем id_characteristic в массив
                 idCharacteristics.push(form.id_characteristic);
             });
-            // Отправляем массив id_characteristic на сервер
-            fetch('/save-data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id_characteristics: idCharacteristics }),
-            })
-                .then(response => response.json())
-                .then(data => console.log(data))
-                .catch(error => console.error('Ошибка:', error));
+
+            // Выводим данные в консоль (можно удалить в продакшене)
+            console.log('ID Characteristics:', idCharacteristics);
         })
-        .catch(error => console.error('Ошибка:', error));
+        .catch(error => console.error('Ошибка при загрузке формы:', error));
 }
-    document.getElementById('myForm').addEventListener('submit', function(e) {
+
+// Обработка отправки формы
+document.getElementById('myForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Останавливаем стандартное поведение формы
+
+    // Собираем данные из формы
+    const formData = new FormData(this);
+
+    fetch(this.action, {
+        method: 'POST',
+        body: formData,
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Данные успешно сохранены!');
+                // Можно выполнить перенаправление или другие действия
+            } else {
+                alert('Ошибка при сохранении данных.');
+            }
+        })
+        .catch(error => console.error('Ошибка при отправке формы:', error));
+});
+document.getElementById('myForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const formData = new FormData(this);
@@ -113,9 +128,6 @@ $(function () {
     var isMatch = optionText.indexOf(searchQuery) >= 0;
     option.style.display = isMatch ? '' : 'none';
 }
-});
-    $(document).ready(function() {
-    $('#tutor').select2();
 });
 
 

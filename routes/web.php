@@ -1,12 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\backend\{ToPdfController, WriteOffController, ImportController,CategoryController, UserController,SynchronizeController, DitInvertoryController,DahrInvertoryController,MoveAndChangeController, AllDatabaseController, PropertiesController};
 use App\Http\Controllers\Auth\LoginController;
 
 
-// Auth::routes();
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
     Route::get('/login', [LoginController::class, 'login'])->name('login');
@@ -55,7 +55,7 @@ use App\Http\Controllers\Auth\LoginController;
     Route::get('/noNumber', [AllDatabaseController::class,'noNumber'])->name('noNumber');
 
     Route::get('/all/{id}', [MoveAndChangeController::class,'editAll'])->name('editAll');
-    Route::post('/all/update/{id}', [MoveAndChangeController::class,'updateAll'])->name('updateAll');
+    Route::post('/all/{id_product}', [MoveAndChangeController::class, 'updateAll'])->name('updateAll');
     Route::post('/all/confirm/{id}', [MoveAndChangeController::class,'confirmStatus'])->name('confirmStatus');
     Route::post('/all/refuse/{id}', [MoveAndChangeController::class,'refuseStatus'])->name('refuseStatus');
     Route::get('/get-product-form/{id}', [MoveAndChangeController::class,'getForm'])->name('getForm');
@@ -69,4 +69,4 @@ use App\Http\Controllers\Auth\LoginController;
 
     Route::get('/open_pdf', [ToPdfController::class, 'open_pdf'])->name('open_pdf');
 
-Route::post('/generate-pdf', [ToPdfController::class, 'generatePdf'])->name('generate.pdf');
+    Route::post('/generate-pdf', [ToPdfController::class, 'generatePdf'])->name('generate.pdf');
