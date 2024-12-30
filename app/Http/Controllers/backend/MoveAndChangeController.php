@@ -177,7 +177,7 @@ class MoveAndChangeController extends Controller
         }
 
         // Перенаправляем обратно на предыдущую страницу
-        return back()->with('info', 'Отправлен на доработку');
+        return back()->with('success', 'Отправлен на доработку');
     }
 
     public function change_tutor(){
