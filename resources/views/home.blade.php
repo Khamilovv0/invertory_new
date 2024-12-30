@@ -31,7 +31,7 @@
                                     <div class="col-md-12">
                                         <div class="card card-info collapsed-card">
                                             <div class="card-header">
-                                                <h3 class="card-title">Ошибка</h3>
+                                                <h3 class="card-title">Ошибка при редактировании</h3>
 
                                                 <div class="card-tools">
                                                     <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
@@ -41,10 +41,11 @@
                                             </div>
                                             <!-- /.card-header -->
                                             <div class="card-body">
-                                                <p><b>Инвертарный номер: </b> {{$message->inv_number}}</p>
+                                                <p><b>Инвентарный номер: </b> {{$message->inv_number}}</p>
                                                 <p><b>Название инвертаря: </b> {{$message->name_product}}</p>
                                                 <p><b>Данные редактора: </b> {{$message->tutor_fullname}}</p>
-                                                <p><b>Сообщение об ошибке: </b> {{$message->message}}</p>
+                                                <p style="color: red;"><b>Сообщение об ошибке: </b> {{$message->message}}</p>
+                                                <p style="color: #0d6efd">Для исправления ошибки пройдите на страницу базы и в поле поиска введитинвентарный номер(<b style="color: #00a8c6">{{$message->inv_number}}</b>)</p>
                                             </div>
                                             <!-- /.card-body -->
                                         </div>

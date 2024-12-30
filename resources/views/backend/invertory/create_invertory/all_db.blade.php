@@ -102,7 +102,7 @@
                                     @elseif($item->verification_status == 2)
                                         <span class="badge bg-success">Подтверждено</span>
                                     @elseif($item->verification_status == 3)
-                                        <span class="badge bg-danger">Отказано</span>
+                                        <span class="badge bg-danger">На доработке</span>
                                     @endif
 
                                 </td>
@@ -120,9 +120,6 @@
                                                                    '{{ $item->id_product }}')">
                                             Отказать
                                         </button>
-                                        <!-- Модальное окно -->
-
-                                        <!-- /.modal -->
                                     </td>
                                 @endif
                             </tr>
@@ -153,6 +150,7 @@
             <!-- /.card -->
         </div>
     </div>
+    <!-- Модальное окно -->
     <div class="modal fade" id="modal-lg">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -169,10 +167,10 @@
                         <textarea class="form-control" type="text" name="message" id="message" placeholder="Напишите причину..."></textarea>
                     </div>
                     <!-- Скрытые поля для передачи данных строки -->
-                    <input style="margin: 5px; width: 70%" class="form-control" readonly name="inv_number" id="inv_number">
-                    <input style="margin: 5px; width: 70%" class="form-control" readonly name="redactor_id" id="redactor_id">
-                    <input style="margin: 5px; width: 70%" class="form-control" readonly name="id_product" id="id_product">
-                    <input style="margin: 5px; width: 70%" class="form-control" readonly name="id_name" id="id_name">
+                    <input style="margin: 20px; width: 30%" class="form-control" readonly name="inv_number" id="inv_number">
+                    <input style="margin: 20px; width: 30%" class="form-control" readonly name="redactor_id" id="redactor_id">
+                    <input style="margin: 20px; width: 30%" class="form-control" readonly name="id_product" id="id_product">
+                    <input style="margin: 20px; width: 30%" class="form-control" readonly name="id_name" id="id_name">
                     <div class="card-body">
                         <button class="btn btn-primary" type="submit">Отправить</button>
                     </div>
@@ -182,6 +180,7 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
+    <!-- /.modal -->
 
     <script>
 

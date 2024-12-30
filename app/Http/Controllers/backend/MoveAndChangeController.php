@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class MoveAndChangeController extends Controller
 {
@@ -151,32 +152,25 @@ class MoveAndChangeController extends Controller
         }
 
         // Перенаправляем обратно на предыдущую страницу
-        return back();
+        return back()->with('success', 'Статус подтвержден!');
     }
 
     public function refuseStatus(Request $request, $id)
     {
-        // Находим запись по ID
         $item = in_product_lists::where('id_product', $id)->first();
 
         $adminTutorID = [646, 359];
-        // Проверяем, является ли текущий пользователь администратором
         if (in_array(Auth::user()->TutorID, $adminTutorID)) {
             // Обновляем значение поля "status"
+            $id = $request->input('id_product'); // Получаем ID из скрытого поля
+            $item = in_product_lists::findOrFail($id);
             $item->verification_status = 3;
             $item->save();
 
-            // Создаем новую запись в таблице in_messages
-            $message = new in_messages();
-            $message->message = $request->input('message');
-            $message->TutorID = $request->input('redactor_id');
-            $message->inv_number = $request->input('inv_number');
-            $message->id_name = $request->input('id_name');
-            $message->id_product = $request->input('id_product');
-            $message->save();
+            $actual = in_messages::where('id_product', $id)->delete();
+
         }
 
-        // Перенаправляем обратно на предыдущую страницу
         return back()->with('success', 'Отправлен на доработку');
     }
 

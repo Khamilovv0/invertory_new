@@ -22,6 +22,7 @@ class in_product_lists extends Model
     protected $fillable = [
         'inv_number',
         'status',
+        'verification_status',
         'current_status',
         'actual_inventory',
         'auditoryID',

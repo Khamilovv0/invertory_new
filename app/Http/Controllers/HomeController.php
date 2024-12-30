@@ -35,6 +35,7 @@ class HomeController extends Controller
                 DB::raw("CONCAT(t.lastname, ' ', t.firstname) AS tutor_fullname"),
                 'p.name_product'
             )
+            ->orderBy('id_message', 'desc')
             ->get();
 
         return view('home', compact('messages'));
