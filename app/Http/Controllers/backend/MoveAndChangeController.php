@@ -8,9 +8,11 @@ use App\Models\in_list_characteristics;
 use App\Models\in_product_list_characteristics;
 use App\Models\in_product_lists;
 use App\Models\in_messages;
+use App\Models\Move;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class MoveAndChangeController extends Controller
 {
@@ -161,7 +163,7 @@ class MoveAndChangeController extends Controller
         // Проверяем, является ли текущий пользователь администратором
         if (in_array(Auth::user()->TutorID, $adminTutorID)) {
             // Обновляем значение поля "status"
-            $item->verification_status = 3; // Замените 2 на нужное значение для подтвержденного статуса
+            $item->verification_status = 3;
             $item->save();
 
             // Создаем новую запись в таблице in_messages
@@ -233,6 +235,7 @@ class MoveAndChangeController extends Controller
         return view('backend.invertory.redactor.edit_change', compact('edit'));
     }
 
+
     public function insert(Request $request, $id_product)
     {
         $id = DB::table('in_product_lists')->insert([
@@ -246,29 +249,65 @@ class MoveAndChangeController extends Controller
             'redactor_id'=> Auth::user()->TutorID,
         ]);
 
+        $date = $request->input('date');
+
+        // Проверка наличия загруженного файла
+        if ($request->hasFile('file')) {
+            try {
+                $uniqueFileName = Str::uuid() . '.' . $request->file('file')->getClientOriginalExtension();
+                $filePath = $request->file('file')->storeAs('public/move_document', $uniqueFileName);
+
+                Move::create([
+                    'file' => 'move_document/' . $uniqueFileName,
+                    'inv_number' => $request->input('inv_number'),
+                ]);
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', 'Ошибка при загрузке файла: ' . $e->getMessage());
+            }
+        } else {
+            return redirect()->back()->with('error', 'Файл не был загружен.');
+        }
+
         in_product_lists::where('id_product', $id_product)->update(['actual_inventory' => 0]);
 
         return view('backend.invertory.redactor.change')->with('success','Перемещение успешно совершено!');
     }
 
-    public function story($id_name){
-
+    public function story($id_name)
+    {
         $results = DB::table('in_product_lists')
             ->where('id_name', $id_name)
-            ->join('auditories', 'in_product_lists.auditoryID', '=', 'auditories.auditoryID')
-            ->join('tutors AS tutor', 'in_product_lists.TutorID', '=', 'tutor.TutorID')
-            ->join('tutors AS redactor', 'in_product_lists.redactor_id', '=', 'redactor.TutorID')
+            ->leftJoin('auditories', 'in_product_lists.auditoryID', '=', 'auditories.auditoryID')
+            ->leftJoin('tutors AS tutor', 'in_product_lists.TutorID', '=', 'tutor.TutorID')
+            ->leftJoin('tutors AS redactor', 'in_product_lists.redactor_id', '=', 'redactor.TutorID')
+            ->leftJoin('move_inventory', 'in_product_lists.inv_number', '=', 'move_inventory.inv_number')
+            ->whereNotNull('move_inventory.id') // Исключаем записи без связанных документов
             ->select(
                 'auditories.auditoryName',
+                'move_inventory.file',
+                'move_inventory.inv_number',
+                'move_inventory.id',
                 DB::raw("CONCAT(tutor.lastname, ' ', tutor.firstname) AS tutor_fullname"),
                 DB::raw("CONCAT(redactor.lastname, ' ', redactor.firstname) AS redactor_fullname"),
                 'in_product_lists.updated_at'
             )
-            ->orderBy('updated_at', 'ASC')
+            ->orderBy('updated_at', 'DESC')
             ->get();
 
         return view('backend.invertory.redactor.story', compact('results'));
     }
+
+    public function move_view(Request $request, $id)
+    {
+        $view = DB::table('move_inventory')->where('id', $id)->first();
+
+        if (!$view) {
+            return redirect()->back()->with('error', 'Документ не найден.');
+        }
+
+        return view('backend.invertory.redactor.move_document_view', compact('view'));
+    }
+
 
     /*public function writeOff($id_product)
     {

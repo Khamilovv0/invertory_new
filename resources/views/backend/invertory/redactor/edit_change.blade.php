@@ -47,7 +47,7 @@
                                         </div>
                                         <br>
                                         <div class="form-group">
-                                            <label for="tutor">Инвентарь</label>
+                                            <label for="tutor">Ответственное лицо</label>
                                             <select id="tutor" name="TutorID" class="form-control">
                                                 <option value="">Выберите ответственное лицо</option>
                                                 @foreach($tutor as $tutors)
@@ -56,19 +56,27 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="inv_number">Инвентарный номер</label>
-                                            <input type="text" name="inv_number"  class="form-control"
-                                                   id="inv_number" placeholder="Введите номер" required readonly value="{{$edit->inv_number}}">
+                                            <label for="fileInput">Загрузите скан-копию АКТа приема и передачи</label>
+                                            <!-- Поле для загрузки файлов -->
+                                            <div class="file-upload" id="fileUpload">
+                                                <input type="file" id="fileInput" multiple accept=".pdf, .doc, .docx" name="file">
+                                                <i style=" font-size: 20px; color: gray; padding-right: 10px" class="fa fa-upload" aria-hidden="true"></i>
+                                                <p>Перетащите файлы сюда или нажмите для загрузки</p>
+                                            </div>
+                                            <!-- Отображение выбранных файлов -->
+                                            <div id="fileList" class="file-list"></div>
                                         </div>
                                         <div class="form-group">
-                                            <label for="category">Инвентарь</label>
-                                            <select id="id_name" name="id_name" class="form-control" readonly>
+                                            <input type="text" name="inv_number"  class="form-control"
+                                                   id="inv_number" placeholder="Введите номер" required readonly hidden value="{{$edit->inv_number}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <select id="id_name" name="id_name" class="form-control" readonly hidden>
                                                 <option value="{{$edit->id_name}}">{{$edit->name_product}}</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="type">Назначение</label>
-                                            <select id="type" name="type" class="form-control" readonly>
+                                            <select id="type" name="type" class="form-control" readonly hidden>
                                                 <option value="{{$edit->type}}">
                                                 @if($edit->type == 1)
                                                     Личный
@@ -80,11 +88,10 @@
                                         </div>
                                         @foreach($edit->characteristics as $characteristic)
                                             <div class="form-group">
-                                                <label for="characteristic">{{ $characteristic->characteristic->name_characteristic }}</label>
                                                 <input type="text" name="id[]"  class="form-control"
                                                        id="characteristic" required readonly hidden value="{{ $characteristic->id_characteristic }}">
                                                 <input type="text" name="names[]"  class="form-control"
-                                                       id="characteristic" placeholder="Введите номер" required readonly value="{{ $characteristic->characteristic_value }}">
+                                                       id="characteristic" placeholder="Введите номер" required readonly hidden value="{{ $characteristic->characteristic_value }}">
                                             </div>
                                         @endforeach
                                     </div>
@@ -105,3 +112,115 @@
         <!-- /.row -->
     </div>
 @endsection
+
+<style>
+    textarea{
+        width: 3rem !important;
+        height: 1.5rem !important;
+        margin-left: 5px !important;
+    }
+    .select2-container--default{
+        width: 100%;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        padding: 1px 7px !important;
+        padding-left: 30px !important;
+    }
+    .select2-selection__choice__remove{
+        padding: 1px 7px !important;
+        margin: 0 !important;
+    }
+    .select2-selection__choice__remove:hover{
+        background-color: #0e5b44; !important;
+    }
+    .file-upload {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 50px;
+        border: 2px dashed #aaa;
+        border-radius: 8px;
+        cursor: pointer;
+        background-color: #f9f9f9;
+        transition: background-color 0.3s;
+        text-align: center;
+        position: relative;
+    }
+
+    .file-upload:hover {
+        background-color: #f0f0f0;
+    }
+
+    .file-upload p {
+        font-size: 20px;
+        color: #555;
+        margin: 0;
+        pointer-events: none;
+    }
+
+    .file-upload input[type="file"] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .file-list {
+        margin-top: 20px;
+        width: 100%;
+        max-width: 500px;
+        color: #333;
+    }
+
+    .file-list p {
+        font-size: 16px;
+        margin: 5px 0;
+        background-color: #f0f0f0;
+        padding: 10px;
+        border-radius: 4px;
+    }
+</style>
+
+<script>
+    // script.js
+    document.addEventListener('DOMContentLoaded', function () {
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        const fileUpload = document.getElementById('fileUpload');
+
+        // Обработчик выбора файлов
+        fileInput.addEventListener('change', displayFiles);
+
+        // Обработка события перетаскивания файлов
+        fileUpload.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            fileUpload.classList.add('dragging');
+        });
+
+        fileUpload.addEventListener('dragleave', function () {
+            fileUpload.classList.remove('dragging');
+        });
+
+        fileUpload.addEventListener('drop', function (e) {
+            e.preventDefault();
+            fileUpload.classList.remove('dragging');
+            const files = e.dataTransfer.files;
+            displayFiles({ target: { files } });
+        });
+
+        // Функция для отображения списка загруженных файлов
+        function displayFiles(event) {
+            fileList.innerHTML = ''; // Очистка списка перед добавлением новых файлов
+            const files = event.target.files;
+
+            for (const file of files) {
+                const fileItem = document.createElement('p');
+                fileItem.textContent = `Имя файла: ${file.name}, Размер: ${(file.size / 1024).toFixed(2)} KB`;
+                fileList.appendChild(fileItem);
+            }
+        }
+    });
+
+</script>

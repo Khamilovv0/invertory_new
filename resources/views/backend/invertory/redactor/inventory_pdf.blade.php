@@ -71,6 +71,25 @@
 
     <h3 style="text-align: center;">Опись</h3>
     <h4 style="text-align: center;">Аудитории №@foreach($items->unique('auditoryName') as $item) {{$item->auditoryName}} @endforeach</h4>
+    @php
+        // Группируем записи в зависимости от значения auditoryType
+        $groupedItems = $items->groupBy(function($item) {
+            if ($item->auditoryType == 2) {
+                // Группируем по product_name, характеристикам и TutorID
+                return $item->product_name . '|' .
+                    $item->characteristics->where('current_status', 0)->map(function($characteristic) {
+                        return $characteristic->characteristic->name_characteristic . ':' . $characteristic->characteristic_value;
+                    })->join('; ') . '|' . $item->TutorID;
+            } elseif ($item->auditoryType == 1) {
+                // Группируем только по product_name и характеристикам
+                return $item->product_name . '|' .
+                    $item->characteristics->where('current_status', 0)->map(function($characteristic) {
+                        return $characteristic->characteristic->name_characteristic . ':' . $characteristic->characteristic_value;
+                    })->join('; ');
+            }
+        });
+    @endphp
+
     <table class="table">
         <thead>
         <tr>
@@ -80,73 +99,52 @@
             <th>Количество</th>
             <th>Инвентарный номер</th>
             @php
+                // Проверяем, есть ли записи с auditoryType == 2
                 $hasResponsiblePerson = $items->filter(function($item) {
                     return $item->auditoryType == 2;
                 })->isNotEmpty();
             @endphp
-
-            @if($hasResponsiblePerson)
+            @if ($hasResponsiblePerson)
                 <th>Ответственное лицо</th>
             @endif
-
-
         </tr>
         </thead>
-        @php
-            // Группируем записи по product_name и характеристикам
-            $groupedItems = $items->groupBy(function($item) {
-                return $item->name_product . ' | ' . $item->characteristics->where('current_status', 0)->map(function($characteristic) {
-                    return $characteristic->characteristic->name_characteristic . ': ' . $characteristic->characteristic_value;
-                })->join('; ');
-            });
-        @endphp
-
         <tbody>
-        @php $counter = 1; @endphp <!-- Счётчик для порядковых номеров -->
-
-        @foreach ($items as $item)
-            @if ($item->auditoryType == 2)
-                <tr>
-                    <td>{{ $counter++ }}</td> <!-- Порядковый номер -->
-                    <td>{{ $item->name_product }}</td> <!-- Название продукта -->
-                    <td>
-                        @foreach ($item->characteristics->where('current_status', 0) as $characteristic)
-                            {{ $characteristic->characteristic->name_characteristic }}: {{ $characteristic->characteristic_value }};
-                        @endforeach
-                    </td> <!-- Характеристики -->
-                    <td>1</td> <!-- Количество (по умолчанию 1 для отдельных записей) -->
-                    <td>{{ $item->inv_number }}</td> <!-- Инвентарный номер -->
-                    <td>Ответственное лицо</td> <!-- Ответственное лицо -->
-                </tr>
-            @endif
-        @endforeach
-
-        @php
-            // Группируем записи, у которых auditoryType равен 1
-            $groupedItems = $items->where('auditoryType', 1)->groupBy(function($item) {
-                return $item->name_product . ' | ' . $item->characteristics->where('current_status', 0)->map(function($characteristic) {
-                    return $characteristic->characteristic->name_characteristic . ': ' . $characteristic->characteristic_value;
-                })->join('; ');
-            });
-        @endphp
-
+        @php $counter = 1; @endphp
         @foreach ($groupedItems as $key => $group)
             @php
-                $productName = $group->first()->name_product; // Название продукта
-                $characteristics = explode(' | ', $key)[1]; // Характеристики
+                // Извлекаем название продукта
+                $productName = $group->first()->name_product;
+
+                // Разбиваем ключ для извлечения характеристик
+                $keyParts = explode('|', $key);
+                $characteristics = $keyParts[1]; // Характеристики
                 $invNumbers = $group->pluck('inv_number')->unique()->join(', '); // Уникальные инвентарные номера
             @endphp
             <tr>
-                <td>{{ $counter++ }}</td> <!-- Порядковый номер -->
-                <td>{{ $productName }}</td> <!-- Название продукта -->
-                <td>{{ $characteristics }}</td> <!-- Характеристики -->
-                <td>{{ $group->count() }}</td> <!-- Количество записей в группе -->
-                <td>{{ $invNumbers }}</td> <!-- Инвентарные номера -->
-                <td>Не указано</td> <!-- Ответственное лицо (по умолчанию "Не указано") -->
+                <td>{{ $counter++ }}</td>
+                <td>{{ $productName }}</td>
+                <td>{{ $characteristics }}</td>
+                <td>{{ $group->count() }}</td>
+                <td>{{ $invNumbers }}</td>
+                @if ($hasResponsiblePerson)
+                    @php
+                        // Для каждой записи ищем ответственного
+                        $responsiblePerson = $group->firstWhere('auditoryType', 2);
+                    @endphp
+                    @if ($responsiblePerson)
+                        @php
+                            $nameParts = explode(' ', $responsiblePerson->firstname);
+                            $shortName = mb_substr($nameParts[0] ?? '', 0, 1) . '.';
+                        @endphp
+                        <td>{{ $responsiblePerson->lastname }}&nbsp;{{ $shortName }}</td>
+                    @else
+                        <td></td>
+                    @endif
+                @endif
             </tr>
         @endforeach
         </tbody>
-
     </table>
     <br>
     <div>
@@ -177,35 +175,39 @@
                 <td>Директор департамента информационных технологий:</td>
                 <td></td>
                 @foreach($info->where('division_id', 3) as $dit)
-                @php
-                    $nameParts = explode(' ', $dit->fio_rus);
+                    @php
+                        $nameParts = explode(' ', $dit->fio_rus);
 
-                    $shortName = $nameParts[0] . ' ' . mb_substr($nameParts[1] ?? '', 0, 1) . '.' . mb_substr($nameParts[2] ?? '', 0, 1) . '.';
-                @endphp
-                <td>
-                    {{ $shortName }}
-                </td>
+                        $shortName = $nameParts[0] . ' ' . mb_substr($nameParts[1] ?? '', 0, 1) . '.' . mb_substr($nameParts[2] ?? '', 0, 1) . '.';
+                    @endphp
+                    <td>
+                        {{ $shortName }}
+                    </td>
                 @endforeach
 
             </tr>
             <br>
-            <tr>
-                <td>Ответственный за аудиторию:</td>
-                <td></td>
-                @foreach($items->unique('lastname') as $item)
-                    @php
-                        $nameParts = explode(' ', $item->firstname);
+            @php
+                // Проверяем, есть ли записи с auditoryType == 1
+                $hasResponsiblePerson = $items->where('auditoryType', 1)->isNotEmpty();
+            @endphp
+            @if ($hasResponsiblePerson)
+                <tr>
+                    <td>Ответственный за аудиторию:</td>
+                    <td></td>
+                    @foreach($items->unique('lastname') as $item)
+                        @php
+                            $nameParts = explode(' ', $item->firstname);
 
-                        $shortName = mb_substr($nameParts[0] ?? '', 0, 1) . '.';
-                    @endphp
-                <td>{{$item->lastname}}&nbsp;{{$shortName}}</td>
-                @endforeach
-            </tr>
+                            $shortName = mb_substr($nameParts[0] ?? '', 0, 1) . '.';
+                        @endphp
+                        <td>{{$item->lastname}}&nbsp;{{$shortName}}</td>
+                    @endforeach
+                </tr>
+            @endif
             </tbody>
         </table>
     </div>
 </div>
 </body>
 </html>
-
-

@@ -34,6 +34,11 @@
                                                         <br>
                                                         <strong>Редактор:</strong> &nbsp {{$result->redactor_fullname}}
                                                     </h3>
+                                                    @if(!empty($result->id)) <!-- Проверка на наличие id -->
+                                                    <p style="font-weight: 800; padding: 5px;"><a href="{{route('move_view', $result->id)}}" target="_blank">Акт приема и передачи</a></p>
+                                                    @else
+                                                        <p style="font-weight: 800; padding: 5px; color: #0d6efd">Документ отсутствует</p>
+                                                    @endif
                                                 </div>
                                             </div>
                                         @endforeach

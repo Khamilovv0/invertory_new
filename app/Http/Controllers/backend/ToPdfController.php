@@ -41,6 +41,7 @@ class ToPdfController extends Controller
             ->select(
                 'in_product_lists.*',
                 'auditories.auditoryName',
+                'auditories.auditoryType',
                 'in_product_name.name_product',
                 'tutors.lastname',
                 'tutors.firstname',

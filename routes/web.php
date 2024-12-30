@@ -6,7 +6,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\backend\{ToPdfController, WriteOffController, ImportController,CategoryController, UserController,SynchronizeController, DitInvertoryController,DahrInvertoryController,MoveAndChangeController, AllDatabaseController, PropertiesController};
 use App\Http\Controllers\Auth\LoginController;
 
-
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
     Route::get('/login', [LoginController::class, 'login'])->name('login');
@@ -60,10 +59,11 @@ use App\Http\Controllers\Auth\LoginController;
     Route::post('/all/refuse/{id}', [MoveAndChangeController::class,'refuseStatus'])->name('refuseStatus');
     Route::get('/get-product-form/{id}', [MoveAndChangeController::class,'getForm'])->name('getForm');
     Route::get('/change', [MoveAndChangeController::class,'change_tutor'])->name('change_tutor');
-    Route::get('/change/search', [MoveAndChangeController::class, 'search_item'])->name('search_item');
+    Route::get('/search', [MoveAndChangeController::class, 'search_item'])->name('search_item');
     Route::get('/edit/{id}', [MoveAndChangeController::class,'editChange'])->name('editChange');
     Route::post('/insert/{id}', [MoveAndChangeController::class,'insert'])->name('insert');
     Route::get('/story/{id}', [MoveAndChangeController::class,'story'])->name('story');
+    Route::get('/doc_view/{id}', [MoveAndChangeController::class,'move_view'])->name('move_view');
 
     Route::post('/import', [ImportController::class, 'import'])->name('import');
 

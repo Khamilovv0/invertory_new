@@ -169,10 +169,10 @@
                         <textarea class="form-control" type="text" name="message" id="message" placeholder="Напишите причину..."></textarea>
                     </div>
                     <!-- Скрытые поля для передачи данных строки -->
-                    <input hidden name="inv_number" id="inv_number">
-                    <input hidden name="redactor_id" id="redactor_id">
-                    <input hidden name="id_product" id="id_product">
-                    <input hidden name="id_name" id="id_name">
+                    <input style="margin: 5px; width: 70%" class="form-control" readonly name="inv_number" id="inv_number">
+                    <input style="margin: 5px; width: 70%" class="form-control" readonly name="redactor_id" id="redactor_id">
+                    <input style="margin: 5px; width: 70%" class="form-control" readonly name="id_product" id="id_product">
+                    <input style="margin: 5px; width: 70%" class="form-control" readonly name="id_name" id="id_name">
                     <div class="card-body">
                         <button class="btn btn-primary" type="submit">Отправить</button>
                     </div>
@@ -184,7 +184,6 @@
     </div>
 
     <script>
-        import DataTable from 'datatables.net-dt';
 
         function fillModal(invNumber, redactorId, id_name, id_product) {
             // Находим скрытые поля в модальном окне и устанавливаем им значения

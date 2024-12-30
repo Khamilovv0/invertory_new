@@ -99,6 +99,10 @@ return [
         ],
     ],
 
+    'redirects' => [
+        'login' => '/login',
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Password Confirmation Timeout

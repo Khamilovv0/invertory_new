@@ -36,12 +36,11 @@ class WriteOffController extends Controller
             foreach ($invNumbers as $inv_number) {
                 $id_product = DB::table('in_product_lists')->where('inv_number', $inv_number)->value('id_product');
 
-                // Вставка записи с использованием Eloquent
                 Write_off::create([
                     'inv_number' => $inv_number,
                     'document_number' => $document_number,
                     'theme' => $theme,
-                    'file' => $uniqueFileName,
+                    'file' =>'act/' . $uniqueFileName,
                     'date' => $date,
                     'id_product' => $id_product,
                 ]);
