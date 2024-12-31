@@ -3,18 +3,17 @@ $(document).ready(function () {
 });
 
 $(function () {
-    $("#example1").DataTable({
-        "responsive": true,
-        "autoWidth": false,
-    });
     $('#example2').DataTable({
         "paging": true,
         "lengthChange": true,
+        "lengthMenu": [10, 25, 50, 100, 200, 500],
         "searching": true,
         "ordering": true,
         "info": true,
         "autoWidth": false,
         "responsive": true,
+        "stateSave": true,
+        "deferRender": true,
         "language": {
             "lengthMenu": "Показать _MENU_ записей на странице",
             "zeroRecords": "Записи не найдены",

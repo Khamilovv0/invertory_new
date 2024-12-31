@@ -38,6 +38,8 @@ use App\Http\Controllers\Auth\LoginController;
         Route::get('/write_off_list', [WriteOffController::class,'write_off_list'])->name('write_off_list');
         Route::get('/doc_view/{id}', [WriteOffController::class,'doc_view'])->name('doc_view');
 
+        Route::get('/export', [AllDatabaseController::class,'export'])->name('export');
+
     });
     //Ссылки доступные всем пользователям
     Route::get('/dit_create', [DitInvertoryController::class,'CreateDit'])->name('createDit');

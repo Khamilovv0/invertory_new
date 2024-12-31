@@ -132,4 +132,30 @@ class AllDatabaseController extends Controller
 
         return view('backend.invertory.create_invertory.all_db', ['items' => $items]);
     }
+
+    public function export()
+    {
+        $items = in_product_lists::with(['characteristics' => function ($query) {
+            $query->with('characteristic')->where('current_status', '0');
+        }])
+            ->leftJoin('auditories', 'in_product_lists.auditoryID', '=', 'auditories.auditoryID')
+            ->leftJoin('buildings', 'in_product_lists.buildingID', '=', 'buildings.buildingID')
+            ->leftJoin('in_product_name', 'in_product_lists.id_name', '=', 'in_product_name.id_name')
+            ->leftJoin('tutors AS tutor', 'in_product_lists.TutorID', '=', 'tutor.TutorID')
+            ->leftJoin('tutors AS redactor', 'in_product_lists.redactor_id', '=', 'redactor.TutorID')
+            ->select(
+                'in_product_lists.*',
+                'buildings.buildingName',
+                'auditories.auditoryName',
+                'in_product_name.name_product',
+                DB::raw("CONCAT(tutor.lastname, ' ', tutor.firstname) AS tutor_fullname"),
+                DB::raw("CONCAT(redactor.lastname, ' ', redactor.firstname) AS redactor_fullname")
+            )
+            ->where('in_product_lists.actual_inventory', 1)
+            ->where('in_product_lists.write_off', 1)
+            ->orderBy('id_product', 'desc')
+            ->get();
+
+        return view('backend.invertory.create_invertory.export_db', ['items' => $items]);
+    }
 }

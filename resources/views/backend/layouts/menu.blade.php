@@ -10,6 +10,11 @@
 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
     <!-- Add icons to the links using the .nav-icon class
          with font-awesome or any other icon font library -->
+    @php
+
+        $adminTutorID = [646, 359];
+
+    @endphp
     <li class="nav-item">
         <a href="/" class="nav-link">
             <i class="bi bi-house-fill"></i>
@@ -55,7 +60,7 @@
                 <i class="fas fa-angle-left right"></i>
             </p>
         </a>
-        <ul class="nav nav-treeview">
+        <ul class="nav nav-treeview" style="margin-left: 12px;">
             <li class="nav-item">
                 <a href="{{route('all')}}" class="nav-link">
                     <i class="bi bi-globe"></i>
@@ -80,6 +85,14 @@
                     <p>Без инвентарного номера</p>
                 </a>
             </li>
+            @if (in_array(Auth::user()->TutorID, $adminTutorID))
+                <li class="nav-item">
+                    <a href="{{route('export')}}" class="nav-link">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                        <p>Экспорт данных</p>
+                    </a>
+                </li>
+            @endif
         </ul>
     </li>
     <li class="nav-item">
@@ -94,12 +107,6 @@
             <p>Формирование описи</p>
         </a>
     </li>
-
-    @php
-
-        $adminTutorID = [646, 359];
-
-    @endphp
     @if (in_array(Auth::user()->TutorID, $adminTutorID))
 
         <li class="nav-item">
@@ -110,7 +117,7 @@
                     <i class="fas fa-angle-left right"></i>
                 </p>
             </a>
-            <ul class="nav nav-treeview">
+            <ul class="nav nav-treeview" style="margin-left: 12px;">
                 <li class="nav-item">
                     <a href="{{route('write_off')}}" class="nav-link">
                         <i class="bi bi-x-octagon-fill"></i>
@@ -133,7 +140,7 @@
                     <i class="fas fa-angle-left right"></i>
                 </p>
             </a>
-            <ul class="nav nav-treeview">
+            <ul class="nav nav-treeview" style="margin-left: 12px;">
                 <li class="nav-item">
                     <a href="{{route('synchronize')}}" class="nav-link">
                         <i class="bi bi-arrow-repeat"></i>
