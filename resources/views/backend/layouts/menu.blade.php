@@ -107,6 +107,29 @@
             <p>Формирование описи</p>
         </a>
     </li>
+    <li class="nav-item">
+        <a href="#" class="nav-link">
+            <i class="bi bi-arrow-clockwise"></i>
+            <p>
+                Генератор QR-кода
+                <i class="fas fa-angle-left right"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview" style="margin-left: 12px;">
+            <li class="nav-item">
+                <a href="{{route('for_qr_list_inv')}}" class="nav-link">
+                    <i class="bi bi-qr-code"></i>
+                    <p>Генератор QR-кода по инвентарному номеру</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{route('for_qr_list_auditory')}}" class="nav-link">
+                    <i class="bi bi-qr-code"></i>
+                    <p>Генератор QR-кода по аудиториям</p>
+                </a>
+            </li>
+        </ul>
+    </li>
     @if (in_array(Auth::user()->TutorID, $adminTutorID))
 
         <li class="nav-item">

@@ -165,6 +165,10 @@
     <!-- REQUIRED SCRIPTS -->
     <!-- jQuery -->
     <script src="{{asset('backend/plugins/jquery/jquery.min.js')}}"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{{asset('backend/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <!-- AdminLTE App -->
+    <script src="{{asset('backend/dist/js/adminlte.min.js')}}"></script>
     <!-- AdminLTE App -->
     <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
     <!-- End  Sweet Alert and Toaster notifications -->
@@ -182,6 +186,13 @@
         dom: 'Bfrtip',
         buttons: [
             {
+                customize: function(doc) {
+                    // Дополнительная настройка PDF (например, шрифт, стили)
+                    doc.styles.tableHeader.fontSize = 10; // Размер шрифта заголовков таблицы
+                    doc.styles.tableBodyEven.alignment = 'center'; // Центрирование текста
+                    doc.styles.tableBodyOdd.alignment = 'center';
+                    // Настройка стилей таблицы
+                },
                 extend: 'excelHtml5',
                 text: 'Экспорт в Excel',
                 serverSide: true,
@@ -196,10 +207,12 @@
                 extend: 'pdfHtml5',
                 text: 'Экспорт в PDF',
                 serverSide: true,
+                orientation: 'landscape',
+                pageSize: 'A4',
                 exportOptions: {
                     columns: ':visible',
                     modifier: {
-                        page: 'all' // Экспортировать все страницы
+                        page: 'all'
                     }
                 }
             },
@@ -210,7 +223,7 @@
                 exportOptions: {
                     columns: ':visible',
                     modifier: {
-                        page: 'all' // Экспортировать все страницы
+                        page: 'all'
                     }
                 }
             }

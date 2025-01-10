@@ -1,5 +1,8 @@
 $(document).ready(function () {
-    $('#tutor, #auditory, #head, #recordSelect, #building' ).select2();
+    $('#tutor, #auditory, #head, #recordSelect, #building' ).select2({
+        width: '100%', // Делает поле поиска адаптивным
+        minimumResultsForSearch: 0
+    });
 });
 
 $(function () {

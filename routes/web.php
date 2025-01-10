@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\backend\{ToPdfController, WriteOffController, ImportController,CategoryController, UserController,SynchronizeController, DitInvertoryController,DahrInvertoryController,MoveAndChangeController, AllDatabaseController, PropertiesController};
+use App\Http\Controllers\backend\{ForQrCodeController, ToPdfController, WriteOffController, ImportController,CategoryController, UserController,SynchronizeController, DitInvertoryController,DahrInvertoryController,MoveAndChangeController, AllDatabaseController, PropertiesController};
 use App\Http\Controllers\Auth\LoginController;
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -39,7 +39,11 @@ use App\Http\Controllers\Auth\LoginController;
         Route::get('/doc_view/{id}', [WriteOffController::class,'doc_view'])->name('doc_view');
 
         Route::get('/export', [AllDatabaseController::class,'export'])->name('export');
-
+        Route::get('/for_qr_inv', [ForQrCodeController::class,'for_qr_list_inv'])->name('for_qr_list_inv');
+        Route::get('/for_qr_auditory', [ForQrCodeController::class,'for_qr_list_auditory'])->name('for_qr_list_auditory');
+        Route::post('/qr_pdf_inv', [ForQrCodeController::class,'qr_generate_inv'])->name('qr_generate_inv');
+        Route::post('/qr_pdf_auditory', [ForQrCodeController::class,'qr_generate_auditory'])->name('qr_generate_auditory');
+        Route::get('/scan', [ForQrCodeController::class,'qr_scan'])->name('qr_scan');
     });
     //Ссылки доступные всем пользователям
     Route::get('/dit_create', [DitInvertoryController::class,'CreateDit'])->name('createDit');
@@ -72,3 +76,8 @@ use App\Http\Controllers\Auth\LoginController;
     Route::get('/open_pdf', [ToPdfController::class, 'open_pdf'])->name('open_pdf');
 
     Route::post('/generate-pdf', [ToPdfController::class, 'generatePdf'])->name('generate.pdf');
+
+
+Route::middleware([])->group(function () {
+    Route::get('/qr_scan_list/{id_product}', [ForQrCodeController::class,'qr_scan_list'])->name('qr_scan_list');
+});
