@@ -19,12 +19,14 @@ class ForQrCodeController extends Controller
             ->leftJoin('auditories', 'in_product_lists.auditoryID', '=', 'auditories.auditoryID')
             ->where('in_product_lists.actual_inventory', 1)
             ->where('in_product_lists.write_off', 1)
+            ->where('in_product_lists.verification_status', 2)
             ->orderBy('id_product', 'desc')->get();
 
         return view('backend.invertory.generator.for_qr_list_inv', ['for_qr' => $list]);
     }
     public function for_qr_list_auditory(){
-        $list = DB::table('auditories')->get();
+        $list = DB::table('auditories')
+            ->get();
         $sortedAuditories = $list->sortBy('auditoryName');
 
         return view('backend.invertory.generator.for_qr_list_auditory', ['for_qr' => $sortedAuditories]);
@@ -42,6 +44,9 @@ class ForQrCodeController extends Controller
 
         // Получаем данные из базы для выбранных ID
         $products = in_product_lists::whereIn('id_product', $id_products)
+            ->where('in_product_lists.actual_inventory', 1)
+            ->where('in_product_lists.write_off', 1)
+            ->where('in_product_lists.verification_status', 2)
             ->select('inv_number', 'id_product')
             ->get();
 
@@ -75,6 +80,9 @@ class ForQrCodeController extends Controller
 
         // Получаем данные из базы для указанного auditoryID
         $products = in_product_lists::where('auditoryID', $auditoryID)
+            ->where('in_product_lists.actual_inventory', 1)
+            ->where('in_product_lists.write_off', 1)
+            ->where('in_product_lists.verification_status', 2)
             ->select('inv_number', 'id_product', 'auditoryID')
             ->get();
 
@@ -124,7 +132,8 @@ class ForQrCodeController extends Controller
                 DB::raw("CONCAT(redactor.lastname, ' ', redactor.firstname) AS redactor_fullname")
             )
             ->where('in_product_lists.actual_inventory', 1)
-            ->where('in_product_lists.write_off', 1);
+            ->where('in_product_lists.write_off', 1)
+            ->where('in_product_lists.verification_status', 2);
 
         // Добавление условия поиска, если передан id_product
         if (!empty($id_product)) {
