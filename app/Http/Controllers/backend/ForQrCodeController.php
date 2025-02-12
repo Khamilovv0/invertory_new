@@ -54,7 +54,7 @@ class ForQrCodeController extends Controller
         foreach ($products as $product) {
             $url = route('qr_scan_list', ['id_product' => $product->id_product]); // Генерация ссылки через маршрут
             $qrCode = QrCode::format('svg')
-                ->size(432) // Размер в пикселях (54 мм)
+                ->size(354) // Размер в пикселях (54 мм)
                 ->margin(0) // Без отступов
                 ->generate($url); // Вставляем URL в QR-код
 
@@ -95,7 +95,7 @@ class ForQrCodeController extends Controller
         foreach ($products as $product) {
             $url = route('qr_scan_list', ['id_product' => $product->id_product]); // Генерация ссылки через маршрут
             $qrCode = QrCode::format('svg')
-                ->size(432) // Размер в пикселях (54 мм)
+                ->size(354) // Размер в пикселях (54 мм)
                 ->margin(0) // Без отступов
                 ->generate($url); // Вставляем URL в QR-код
 

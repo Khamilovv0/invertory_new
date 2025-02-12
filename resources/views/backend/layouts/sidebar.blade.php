@@ -9,7 +9,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{asset('backend/dist/img/user.png')}}" class="" alt="User Image">
+          <img src="{{asset('backend/dist/img/user.png')}}" class="" alt="Logo Inventory">
         </div>
         <div class="info">
           <a href="#" class="d-block">{{ Auth::user()->lastname }} {{ Auth::user()->firstname }}</a>
