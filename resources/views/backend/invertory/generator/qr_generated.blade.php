@@ -14,8 +14,9 @@
             font-family: Arial, sans-serif;
         }
         .qr-code {
-            width: 400mm; /* Ширина QR-кода */
-            height: 400mm; /* Высота QR-кода */
+            margin-top: 10mm;
+            width: 390mm; /* Ширина QR-кода */
+            height: 390mm; /* Высота QR-кода */
         }
     </style>
 </head>
