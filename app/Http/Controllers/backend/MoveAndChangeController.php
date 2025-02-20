@@ -157,21 +157,36 @@ class MoveAndChangeController extends Controller
 
     public function refuseStatus(Request $request, $id)
     {
+        $validated = $request->validate([
+            'message' => 'required|string',
+            'inv_number' => 'required',
+            'redactor_id' => 'required',
+            'id_product' => 'required',
+            'id_name' => 'required',
+        ]);
+
         $item = in_product_lists::where('id_product', $id)->first();
 
         $adminTutorID = [646, 359];
         if (in_array(Auth::user()->TutorID, $adminTutorID)) {
             // Обновляем значение поля "status"
-            $id = $request->input('id_product'); // Получаем ID из скрытого поля
+            $id = $request->input('id_product');
             $item = in_product_lists::findOrFail($id);
             $item->verification_status = 3;
             $item->save();
 
-            $actual = in_messages::where('id_product', $id)->delete();
+            $message = new in_messages();
+            $message->message = $validated['message'];
+            $message->TutorID = $validated['redactor_id'];
+            $message->inv_number = $validated['inv_number'];
+            $message->id_name = $validated['id_name'];
+            $message->id_product = $validated['id_product'];
+            $message->save();
+
 
         }
 
-        return back()->with('success', 'Отправлен на доработку');
+        return back()->with('warning', 'Отправлен на доработку');
     }
 
     public function change_tutor(){

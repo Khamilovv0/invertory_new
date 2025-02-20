@@ -49,9 +49,25 @@ class DitInvertoryController extends Controller
     }
 
     public function addAll(Request $request) {
-        $quantity = $request->input('quantity'); // Получаем количество из инпута
+        // Получаем количество из инпута
+        $quantity = $request->input('quantity');
+
+        // Если quantity пустое, устанавливаем количество на 1
+        $quantity = $quantity ?? 1;
 
         for ($i = 0; $i < $quantity; $i++) {
+            // Проверка на существование inv_number в базе
+            $invNumber = $request->input('inv_number');
+            $existingRecord = DB::table('in_product_lists')
+                ->where('inv_number', $invNumber)
+                ->where('actual_inventory', 1)
+                ->where('in_product_lists.write_off', 1)
+                ->first();
+
+            if ($existingRecord) {
+                return redirect()->back()->with('error', 'Инвентарный номер "' . $invNumber . '" уже существует в базе данных.');
+            }
+
             // Вставка записи в таблицу in_product_lists и получение id
             $id = DB::table('in_product_lists')->insertGetId([
                 'id_name' => $request->input('id_name'),
@@ -59,7 +75,7 @@ class DitInvertoryController extends Controller
                 'auditoryID' => $request->input('auditoryID'),
                 'TutorID' => $request->input('TutorID'),
                 'type' => $request->input('type'),
-                'inv_number' => $request->input('inv_number'),
+                'inv_number' => $invNumber,
                 'redactor_id' => Auth::user()->TutorID,
             ]);
 
@@ -81,6 +97,7 @@ class DitInvertoryController extends Controller
 
         return redirect()->back()->with('success', 'Данные успешно добавлены!');
     }
+
 
 
     public function forBuilding($buildingId)
