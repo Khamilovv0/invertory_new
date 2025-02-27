@@ -54,6 +54,7 @@
     </div>
     <div class="approved">
         «Утверждаю»:<br>
+        Первый проректор – <br>
         Проректор по АРиМС<br>
         ___________
         @foreach($info->where('id_job', 36) as $prorector)
@@ -151,7 +152,7 @@
         <table>
             <tbody style="text-align: left !important; font-size: 14px !important;">
             <tr>
-                <td>Директор департамента по административно-хозяйственным <br>работам:</td>
+                <td>Директор департамента по административно-хозяйственной <br>деятельности:</td>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                 <td> Кузанов Х.С.</td>
             </tr>

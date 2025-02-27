@@ -53,8 +53,13 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="inv_number">Инвертарный номер</label>
-                                            <input type="text" name="inv_number"  class="form-control"
-                                                   id="inv_number" placeholder="Введите номер" required readonly value="{{$edit->inv_number}}">
+                                            @if(empty($edit->inv_number))
+                                                <input type="text" name="inv_number"  class="form-control"
+                                                       id="inv_number" placeholder="Введите номер" required>
+                                            @else
+                                                <input type="text" name="inv_number"  class="form-control"
+                                                       id="inv_number" placeholder="Введите номер" required readonly value="{{$edit->inv_number}}">
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

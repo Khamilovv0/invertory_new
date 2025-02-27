@@ -8,7 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
-    Route::get('/login', [LoginController::class, 'login'])->name('login');
+Route::get('/login', [LoginController::class, 'login'])->name('login');
     Route::post('/login', [LoginController::class,'authenticate']);
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/authenticateViaToken', [LoginController::class, 'authenticateViaToken'])->name('authenticateViaToken');
@@ -76,6 +76,7 @@ use App\Http\Controllers\Auth\LoginController;
     Route::get('/open_pdf', [ToPdfController::class, 'open_pdf'])->name('open_pdf');
 
     Route::post('/generate-pdf', [ToPdfController::class, 'generatePdf'])->name('generate.pdf');
+
 
 
 Route::middleware([])->group(function () {

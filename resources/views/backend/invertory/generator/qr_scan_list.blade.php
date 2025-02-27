@@ -153,8 +153,9 @@
                                                 @endif
                                             </p>
                                             <p><strong>Характеристика:</strong>
+                                                <br>
                                                 @foreach($item->characteristics->where('current_status', 0) as $characteristic)
-                                                    <strong>{{ $characteristic->characteristic->name_characteristic }}:</strong> {{ $characteristic->characteristic_value }};
+                                                    <strong style="margin-left: 10px;">{{ $characteristic->characteristic->name_characteristic }}:</strong> {{ $characteristic->characteristic_value }};
                                                     <br>
                                                 @endforeach
                                             </p>

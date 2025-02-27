@@ -59,70 +59,72 @@
                         </thead>
                         <tbody>
                         @foreach($items as $item)
-                            @php
-                                $updated_at = \Carbon\Carbon::parse($item->updated_at);
+                            @if(!empty($item))
+                                @php
+                                    $updated_at = \Carbon\Carbon::parse($item->updated_at);
 
-                                $formattedDate = $updated_at->format('d.m.Y');
-                            @endphp
-                            <tr>
-                                <td>{{ $item->name_product }}</td>
-                                <td>{{ $item->buildingName }}</td>
-                                <td>{{ $item->auditoryName }}</td>
-                                <td>{{ $item->tutor_fullname }}</td>
-                                <td>{{ $item->inv_number }}</td>
-                                <td>
-                                    @if($item->type == 1)
-                                        Личный
-                                    @elseif($item->type == 2)
-                                        Аудиторный
-                                    @endif
-                                </td>
-                                <td>
-                                    @foreach($item->characteristics->where('current_status', 0) as $characteristic)
-                                        <strong>{{ $characteristic->characteristic->name_characteristic }}:</strong> {{ $characteristic->characteristic_value }};
-                                        <br>
-                                    @endforeach
-                                </td>
-                                <td align="center"><p >{{$formattedDate}}</p></td>
-                                <td>
-                                    @if($item->redactor_fullname)
-                                        {{ $item->redactor_fullname }}
-                                    @else
-                                        <h6 style="color: #7f8c8d">Нет данных</h6>
-                                    @endif
-                                </td>
-                                <td align="center">
-                                    <br>
-                                    <a href="{{route('editAll', $item->id_product)}}" class="btn-sm  btn-danger">Редактировать</a>
-                                </td>
-                                <td>
-
-                                    @if($item->verification_status == 1)
-                                        <span class="badge bg-warning">Отправлено.<br>На проверке</span>
-                                    @elseif($item->verification_status == 2)
-                                        <span class="badge bg-success">Подтверждено</span>
-                                    @elseif($item->verification_status == 3)
-                                        <span class="badge bg-danger">На доработке</span>
-                                    @endif
-
-                                </td>
-                                @if (in_array(Auth::user()->TutorID, $adminTutorID))
+                                    $formattedDate = $updated_at->format('d.m.Y');
+                                @endphp
+                                <tr>
+                                    <td>{{ $item->name_product }}</td>
+                                    <td>{{ $item->buildingName }}</td>
+                                    <td>{{ $item->auditoryName }}</td>
+                                    <td>{{ $item->tutor_fullname }}</td>
+                                    <td>{{ $item->inv_number }}</td>
                                     <td>
-                                        <form action="{{ route('confirmStatus', ['id' => $item->id_product]) }}" method="POST">
-                                            @csrf
-                                            <button class="btn btn-block btn-info" type="submit">Подтвердить</button>
-                                        </form>
-                                        <br>
-                                        <button class="btn btn-block btn-danger" data-toggle="modal" data-target="#modal-lg"
-                                                onclick="fillModal('{{ $item->inv_number }}',
-                                                                   '{{ $item->redactor_id }}',
-                                                                   '{{ $item->id_name }}',
-                                                                   '{{ $item->id_product }}')">
-                                            Отказать
-                                        </button>
+                                        @if($item->type == 1)
+                                            Личный
+                                        @elseif($item->type == 2)
+                                            Аудиторный
+                                        @endif
                                     </td>
-                                @endif
-                            </tr>
+                                    <td>
+                                        @foreach($item->characteristics->where('current_status', 0) as $characteristic)
+                                            <strong>{{ $characteristic->characteristic->name_characteristic }}:</strong> {{ $characteristic->characteristic_value }};
+                                            <br>
+                                        @endforeach
+                                    </td>
+                                    <td align="center"><p >{{$formattedDate}}</p></td>
+                                    <td>
+                                        @if($item->redactor_fullname)
+                                            {{ $item->redactor_fullname }}
+                                        @else
+                                            <h6 style="color: #7f8c8d">Нет данных</h6>
+                                        @endif
+                                    </td>
+                                    <td align="center">
+                                        <br>
+                                        <a href="{{route('editAll', $item->id_product)}}" class="btn-sm  btn-danger">Редактировать</a>
+                                    </td>
+                                    <td>
+
+                                        @if($item->verification_status == 1)
+                                            <span class="badge bg-warning">Отправлено.<br>На проверке</span>
+                                        @elseif($item->verification_status == 2)
+                                            <span class="badge bg-success">Подтверждено</span>
+                                        @elseif($item->verification_status == 3)
+                                            <span class="badge bg-danger">На доработке</span>
+                                        @endif
+
+                                    </td>
+                                    @if (in_array(Auth::user()->TutorID, $adminTutorID))
+                                        <td>
+                                            <form action="{{ route('confirmStatus', ['id' => $item->id_product]) }}" method="POST">
+                                                @csrf
+                                                <button class="btn btn-block btn-info" type="submit">Подтвердить</button>
+                                            </form>
+                                            <br>
+                                            <button class="btn btn-block btn-danger" data-toggle="modal" data-target="#modal-lg"
+                                                    onclick="fillModal('{{ $item->inv_number }}',
+                                                                       '{{ $item->redactor_id }}',
+                                                                       '{{ $item->id_name }}',
+                                                                       '{{ $item->id_product }}')">
+                                                Отказать
+                                            </button>
+                                        </td>
+                                    @endif
+                                </tr>
+                            @endif
                         @endforeach
                         </tbody>
                         <tfoot>
@@ -160,21 +162,23 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('refuseStatus', ['id' => $item->id_product]) }}" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <label for="message">Укажите причину отказа</label>
-                        <textarea class="form-control" type="text" name="message" id="message" placeholder="Напишите причину..."></textarea>
-                    </div>
-                    <!-- Скрытые поля для передачи данных строки -->
-                    <input style="margin: 20px; width: 30%" class="form-control" readonly name="inv_number" id="inv_number">
-                    <input style="margin: 20px; width: 30%" class="form-control" readonly name="redactor_id" id="redactor_id">
-                    <input style="margin: 20px; width: 30%" class="form-control" readonly name="id_product" id="id_product">
-                    <input style="margin: 20px; width: 30%" class="form-control" readonly name="id_name" id="id_name">
-                    <div class="card-body">
-                        <button class="btn btn-primary" type="submit">Отправить</button>
-                    </div>
-                </form>
+                @if(!empty($item))
+                    <form action="{{ route('refuseStatus', ['id' => $item->id_product]) }}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <label for="message">Укажите причину отказа</label>
+                            <textarea class="form-control" type="text" name="message" id="message" placeholder="Напишите причину..."></textarea>
+                        </div>
+                        <!-- Скрытые поля для передачи данных строки -->
+                        <input style="margin: 20px; width: 30%" class="form-control" readonly name="inv_number" id="inv_number">
+                        <input style="margin: 20px; width: 30%" class="form-control" readonly name="redactor_id" id="redactor_id">
+                        <input style="margin: 20px; width: 30%" class="form-control" readonly name="id_product" id="id_product">
+                        <input style="margin: 20px; width: 30%" class="form-control" readonly name="id_name" id="id_name">
+                        <div class="card-body">
+                            <button class="btn btn-primary" type="submit">Отправить</button>
+                        </div>
+                    </form>
+                @endif
             </div>
             <!-- /.modal-content -->
         </div>
