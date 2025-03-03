@@ -112,9 +112,10 @@
                                         </td>
                                         <td align="center"><p >{{$formattedDate}}</p></td>
                                         <td align="center">
-                                            <a href="{{route('editChange', $products->id_product)}}" class="btn-sm  btn-danger">Редактировать</a>
-
-                                            <a style="margin-top: 5%" href="{{route('story', $products->id_name)}}" class="btn  btn-success">История перемещения</a>
+                                            <a href="{{route('editChange', $products->id_product)}}" class="btn-sm  btn-danger" title="Редактировать" data-bs-toggle="tooltip"><i class="bi bi-pencil-square"></i></a>
+                                            <br>
+                                            <br>
+                                            <a href="{{route('story', $products->id_name)}}" class="btn-sm  btn-success"  title="История перемещения" data-bs-toggle="tooltip"><i class="bi bi-clock-history"></i></a>
                                         </td>
                                         <td>
                                             @if($products->status == 1)

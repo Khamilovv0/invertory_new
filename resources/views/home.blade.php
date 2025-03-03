@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-header"><h4>{{ __('Информация о пользователе') }}</h4></div>
                     <div class="card-body">
-                        <div class="">
+                        <div class="col">
                             <div class="row">
                                 @foreach($info as $data)
                                     <div class="col-md-4">
