@@ -62,7 +62,7 @@
                         @if ($product->isEmpty())
                             <p>Ничего не найдено.</p>
                         @else
-                            <table id="example1" class="table table-bordered table-striped" style="font-size: 15px !important">
+                            <table id="example2" class="table table-bordered table-striped" style="font-size: 15px !important">
                                 @php
 
                                     $adminTutorID = [646, 359];
@@ -79,10 +79,6 @@
                                     <th>Характеристика</th>
                                     <th>Дата редактирования</th>
                                     <th>Редактирование</th>
-                                    <th>Статус</th>
-                                    @if (in_array(Auth::user()->TutorID, $adminTutorID))
-                                        <th>Подтверждение</th>
-                                    @endif
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -117,28 +113,6 @@
                                             <br>
                                             <a href="{{route('story', $products->id_name)}}" class="btn-sm  btn-success"  title="История перемещения" data-bs-toggle="tooltip"><i class="bi bi-clock-history"></i></a>
                                         </td>
-                                        <td>
-                                            @if($products->status == 1)
-                                                <span class="badge bg-warning">На проверке</span>
-                                            @elseif($products->status == 2)
-                                                <span class="badge bg-success">Подтверждено</span>
-                                            @elseif($products->status == 3)
-                                                <span class="badge bg-danger">Отказано</span>
-                                            @endif
-                                        </td>
-                                        @if (in_array(Auth::user()->TutorID, $adminTutorID))
-                                            <td>
-                                                <form action="{{ route('confirmStatus', ['id' => $products->id_product]) }}" method="POST">
-                                                    @csrf
-                                                    <button class="btn btn-block btn-info" type="submit">Подтвердить</button>
-                                                </form>
-                                                <br>
-                                                <form action="{{ route('refuseStatus', ['id' => $products->id_product]) }}" method="POST">
-                                                    @csrf
-                                                    <button class="btn btn-block btn-danger" type="submit">Отказать</button>
-                                                </form>
-                                            </td>
-                                        @endif
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -153,10 +127,6 @@
                                     <th>Характеристика</th>
                                     <th>Дата редактирования</th>
                                     <th>Редактирование</th>
-                                    <th>Статус</th>
-                                    @if (in_array(Auth::user()->TutorID, $adminTutorID))
-                                        <th>Подтверждение</th>
-                                    @endif
                                 </tr>
                                 </tfoot>
                             </table>
