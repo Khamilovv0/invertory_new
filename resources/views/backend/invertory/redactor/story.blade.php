@@ -26,9 +26,14 @@
                                         <!-- timeline item -->
                                         @foreach($results as $result)
                                             <div>
+                                                @php
+                                                    $updated_at = \Carbon\Carbon::parse($result->updated_at);
+
+                                                    $formattedDate = $updated_at->format('d.m.Y H:m');
+                                                @endphp
                                                 <i class="fas fa-arrow-down bg-blue"></i>
                                                 <div class="timeline-item">
-                                                    <span class="time"><i class="fas fa-clock"></i> {{$result->updated_at}}</span>
+                                                    <span class="time"><i class="fas fa-clock"></i> {{$formattedDate}}</span>
                                                     <h3 class="timeline-header"><a href="#">Местоположение: {{$result->auditoryName}}</a><br>
                                                         <strong>Ответственное лицо:</strong> &nbsp {{$result->tutor_fullname}}
                                                         <br>

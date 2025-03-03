@@ -28,11 +28,12 @@
                                     @endforeach
                                 </div>
                                 <div class="col">
+                                    @if(empty($messages))
                                     @foreach($messages as $message)
                                         <div class="col-md-12">
-                                            <div class="card card-info collapsed-card">
+                                            <div class="card collapsed-card" style="background-color: #0073b7 !important">
                                                 <div class="card-header">
-                                                    <h3 class="card-title">Ошибка при редактировании ({{$message->inv_number}})</h3>
+                                                    <h3 style="color: white" class="card-title">Ошибка при редактировании ({{$message->inv_number}})</h3>
 
                                                     <div class="card-tools">
                                                         <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-plus"></i>
@@ -53,6 +54,17 @@
                                             <!-- /.card -->
                                         </div>
                                     @endforeach
+                                    @else
+                                        <div class="col-md-12">
+                                            <div class="card collapsed-card" style="background-color: #0073b7 !important">
+                                                <div class="card-header">
+                                                    <h6 style="color: white" class="card-title">Здесь будут отображаться ошибки при редактировании</h6>
+                                                </div>
+                                                <!-- /.card-header -->
+                                            </div>
+                                            <!-- /.card -->
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

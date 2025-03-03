@@ -6,10 +6,7 @@
         use Illuminate\Support\Facades\DB;
 
         $product_name= DB::table('in_product_name')->get();
-        /*$tutor = DB::connection('mysql_platonus')->table('tutors')->get();
-        $building = DB::table('buildings')->get();
-        $auditories = DB::table('auditories')->get();
-        $sortedAuditories = $auditories->sortBy('auditoryName');*/
+        $tutor = DB::connection('mysql_platonus')->table('tutors')->get();
 
     @endphp
     <div class="card-body">
@@ -35,14 +32,46 @@
                                                     <option value="{{$edit->id_name}}">{{$edit->name_product}}</option>
                                             </select>
                                         </div>
+                                        @if(empty($edit->auditoryID))
+                                            <div class="form-group">
+                                                <h5><strong>Местоположение</strong></h5>
+                                                <label for="building">Корпус</label>
+                                                <select id="building" name="buildingID" class="form-control">
+                                                    <option value="">Выберите корпус</option>
+                                                    @foreach($building as $buildingID)
+                                                        <option value="{{$buildingID->buildingID}}">{{$buildingID->buildingName}}</option>
+                                                    @endforeach
+                                                </select>
+                                                <label for="auditory">Аудитория</label>
+                                                <select id="auditory" name="auditoryID" class="form-control">
+                                                    <option value="">Выберите аудиторию</option>
+                                                    @foreach($sortedAuditories as $auditory)
+                                                        <option value="{{$auditory->auditoryID}}">{{$auditory->auditoryName}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        @else
                                             <input type="text" name="buildingID"  class="form-control"
                                                    id="inv_number" required  hidden value="{{$edit->buildingID}}">
                                             <input type="text" name="auditoryID"  class="form-control"
                                                    id="inv_number" required readonly hidden value="{{$edit->auditoryID}}">
-                                        <div class="form-group">
-                                            <input type="text" name="TutorID"  class="form-control"
-                                                   id="inv_number" required readonly hidden value="{{$edit->TutorID}}">
-                                        </div>
+                                        @endif
+                                        @if(empty($edit->TutorID))
+                                            <div class="form-group">
+                                                <label for="tutor">Выберите ответственное лицо</label>
+                                                <select id="tutor" name="TutorID" class="form-control">
+                                                    <option value="">Выберите ответственное лицо</option>
+                                                    @foreach($tutor as $tutors)
+                                                        <option value="{{$tutors->TutorID}}">{{$tutors->lastname}} {{$tutors->firstname}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        @else
+                                            <div class="form-group">
+                                                <input type="text" name="TutorID"  class="form-control"
+                                                       id="inv_number" required readonly hidden value="{{$edit->TutorID}}">
+                                            </div>
+                                        @endif
                                         <div class="form-group">
                                             <label for="type">Назначение</label>
                                             <select id="type" name="type" class="form-control">

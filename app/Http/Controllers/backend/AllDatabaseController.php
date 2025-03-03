@@ -32,11 +32,13 @@ class AllDatabaseController extends Controller
             ->leftJoin('in_product_name', 'in_product_lists.id_name', '=', 'in_product_name.id_name')
             ->leftJoin('tutors AS tutor', 'in_product_lists.TutorID', '=', 'tutor.TutorID')
             ->leftJoin('tutors AS redactor', 'in_product_lists.redactor_id', '=', 'redactor.TutorID')
+            ->leftJoin('notes', 'in_product_lists.id_product', '=', 'notes.id_product')
             ->select(
                 'in_product_lists.*',
                 'buildings.buildingName',
                 'auditories.auditoryName',
                 'in_product_name.name_product',
+                'notes.note',
                 DB::raw("CONCAT(tutor.lastname, ' ', tutor.firstname) AS tutor_fullname"),
                 DB::raw("CONCAT(redactor.lastname, ' ', redactor.firstname) AS redactor_fullname")
             )
@@ -58,11 +60,13 @@ class AllDatabaseController extends Controller
             ->leftJoin('in_product_name', 'in_product_lists.id_name', '=', 'in_product_name.id_name')
             ->leftJoin('tutors AS tutor', 'in_product_lists.TutorID', '=', 'tutor.TutorID')
             ->leftJoin('tutors AS redactor', 'in_product_lists.redactor_id', '=', 'redactor.TutorID')
+            ->leftJoin('notes', 'in_product_lists.id_product', '=', 'notes.id_product')
             ->select(
                 'in_product_lists.*',
                 'buildings.buildingName',
                 'auditories.auditoryName',
                 'in_product_name.name_product',
+                'notes.note',
                 DB::raw("CONCAT(tutor.lastname, ' ', tutor.firstname) AS tutor_fullname"),
                 DB::raw("CONCAT(redactor.lastname, ' ', redactor.firstname) AS redactor_fullname")
             )
@@ -87,11 +91,13 @@ class AllDatabaseController extends Controller
                 ->leftJoin('in_product_name', 'in_product_lists.id_name', '=', 'in_product_name.id_name')
                 ->leftJoin('tutors AS tutor', 'in_product_lists.TutorID', '=', 'tutor.TutorID')
                 ->leftJoin('tutors AS redactor', 'in_product_lists.redactor_id', '=', 'redactor.TutorID')
+                ->leftJoin('notes', 'in_product_lists.id_product', '=', 'notes.id_product')
                 ->select(
                     'in_product_lists.*',
                     'buildings.buildingName',
                     'auditories.auditoryName',
                     'in_product_name.name_product',
+                    'notes.note',
                     DB::raw("CONCAT(tutor.lastname, ' ', tutor.firstname) AS tutor_fullname"),
                     DB::raw("CONCAT(redactor.lastname, ' ', redactor.firstname) AS redactor_fullname")
                 )
@@ -116,11 +122,13 @@ class AllDatabaseController extends Controller
             ->leftJoin('in_product_name', 'in_product_lists.id_name', '=', 'in_product_name.id_name')
             ->leftJoin('tutors AS tutor', 'in_product_lists.TutorID', '=', 'tutor.TutorID')
             ->leftJoin('tutors AS redactor', 'in_product_lists.redactor_id', '=', 'redactor.TutorID')
+            ->leftJoin('notes', 'in_product_lists.id_product', '=', 'notes.id_product')
             ->select(
                 'in_product_lists.*',
                 'buildings.buildingName',
                 'auditories.auditoryName',
                 'in_product_name.name_product',
+                'notes.note',
                 DB::raw("CONCAT(tutor.lastname, ' ', tutor.firstname) AS tutor_fullname"),
                 DB::raw("CONCAT(redactor.lastname, ' ', redactor.firstname) AS redactor_fullname")
             )

@@ -50,6 +50,7 @@
                             <th>Характеристика</th>
                             <th>Дата редактирования</th>
                             <th>Последний редактор</th>
+                            <th>Примечание</th>
                             <th>Редактирование</th>
                             <th>Статус</th>
                             @if (in_array(Auth::user()->TutorID, $adminTutorID))
@@ -65,7 +66,7 @@
 
                                     $formattedDate = $updated_at->format('d.m.Y');
                                 @endphp
-                                <tr>
+                                <tr style="text-align: center !important">
                                     <td>{{ $item->name_product }}</td>
                                     <td>{{ $item->buildingName }}</td>
                                     <td>{{ $item->auditoryName }}</td>
@@ -90,6 +91,13 @@
                                             {{ $item->redactor_fullname }}
                                         @else
                                             <h6 style="color: #7f8c8d">Нет данных</h6>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if(!empty($item->note))
+                                            <span class="badge bg-info">{{$item->note}}</span>
+                                        @else
+                                            <p style="color: #7f8c8d">Нет данных</p>
                                         @endif
                                     </td>
                                     <td align="center">
@@ -138,6 +146,7 @@
                             <th>Характеристика</th>
                             <th>Дата редактирования</th>
                             <th>Последний редактор</th>
+                            <th>Примечание</th>
                             <th>Редактирование</th>
                             <th>Статус</th>
                             @if (in_array(Auth::user()->TutorID, $adminTutorID))

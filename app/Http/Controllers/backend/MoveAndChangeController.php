@@ -9,6 +9,7 @@ use App\Models\in_product_list_characteristics;
 use App\Models\in_product_lists;
 use App\Models\in_messages;
 use App\Models\Move;
+use App\Models\Note;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -51,7 +52,13 @@ class MoveAndChangeController extends Controller
             )
             ->where('in_product_lists.actual_inventory', 1)
             ->find($id_product);
-        return view('backend.invertory.redactor.move', compact('edit'));
+
+        $building = DB::table('buildings')->get();
+
+        $auditories = DB::table('auditories')->get();
+
+        $sortedAuditories = $auditories->sortBy('auditoryName');
+        return view('backend.invertory.redactor.move', compact('edit', 'building', 'sortedAuditories'));
     }
 
     public function getForm($id_name)
@@ -147,7 +154,9 @@ class MoveAndChangeController extends Controller
             $item->verification_status = 2; // Замените 2 на нужное значение для подтвержденного статуса
             $item->save();
 
-            $actual = in_messages::where('id_product', $id)->delete();
+            in_messages::where('id_product', $id)->delete();
+
+            Note::where('id_product', $id)->delete();
 
         }
 
@@ -166,6 +175,7 @@ class MoveAndChangeController extends Controller
         ]);
 
         $item = in_product_lists::where('id_product', $id)->first();
+
 
         $adminTutorID = [646, 359];
         if (in_array(Auth::user()->TutorID, $adminTutorID)) {
@@ -247,7 +257,7 @@ class MoveAndChangeController extends Controller
 
     public function insert(Request $request, $id_product)
     {
-        $id = DB::table('in_product_lists')->insert([
+        $new_id = DB::table('in_product_lists')->insertGetId([
             'id_name' => $request->input('id_name'),
             'buildingID' => $request->input('buildingID'),
             'auditoryID' => $request->input('auditoryID'),
@@ -279,6 +289,15 @@ class MoveAndChangeController extends Controller
 
         in_product_lists::where('id_product', $id_product)->update(['actual_inventory' => 0]);
 
+        Note::where('id_product', $id_product)->delete();
+
+        Note::create([
+            'id_product' => $new_id,
+            'note' => 'Перемещено'
+        ]);
+
+
+
         return view('backend.invertory.redactor.change')->with('success','Перемещение успешно совершено!');
     }
 
@@ -300,7 +319,7 @@ class MoveAndChangeController extends Controller
                 DB::raw("CONCAT(redactor.lastname, ' ', redactor.firstname) AS redactor_fullname"),
                 'in_product_lists.updated_at'
             )
-            ->orderBy('updated_at', 'DESC')
+            ->orderBy('updated_at')
             ->get();
 
         return view('backend.invertory.redactor.story', compact('results'));
