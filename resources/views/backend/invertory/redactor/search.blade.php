@@ -62,7 +62,7 @@
                         @if ($product->isEmpty())
                             <p>Ничего не найдено.</p>
                         @else
-                            <table id="example2" class="table table-bordered table-striped" style="font-size: 15px !important">
+                            <table id="example1" class="table table-bordered table-striped" style="font-size: 15px !important">
                                 @php
 
                                     $adminTutorID = [646, 359];
@@ -108,10 +108,16 @@
                                         </td>
                                         <td align="center"><p >{{$formattedDate}}</p></td>
                                         <td align="center">
-                                            <a href="{{route('editChange', $products->id_product)}}" class="btn-sm  btn-danger" title="Редактировать" data-bs-toggle="tooltip"><i class="bi bi-pencil-square"></i></a>
+
+                                            <a href="{{route('editChange', $products->id_product)}}" class="btn-sm btn-danger btn-animated d-flex align-items-center">
+                                                <i class="bi bi-pencil-square"></i>
+                                                <span class="d-none d-md-inline">Редактировать</span>
+                                            </a>
                                             <br>
-                                            <br>
-                                            <a href="{{route('story', $products->id_name)}}" class="btn-sm  btn-success"  title="История перемещения" data-bs-toggle="tooltip"><i class="bi bi-clock-history"></i></a>
+                                            <a href="{{route('story', $products->id_product)}}" class="btn-sm btn-success btn-animated d-flex align-items-center">
+                                                <i class="bi bi-clock-history"></i>
+                                                <span class="d-none d-md-inline">История</span>
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -141,3 +147,20 @@
         <!-- /.row -->
     </div>
 @endsection
+
+<style>
+    .btn-animated {
+        width: 30px;
+        overflow: hidden;
+        transition: width 0.3s ease-in-out;
+        white-space: nowrap;
+    }
+
+    .btn-animated:hover {
+        width: 130px;
+    }
+
+    .btn-animated i {
+        margin-right: 7px;
+    }
+</style>

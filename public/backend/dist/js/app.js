@@ -28,6 +28,29 @@ $(function () {
 
 });
 
+$(function () {
+    $('#example1').DataTable({
+        "paging": true,
+        "lengthChange": true,
+        "lengthMenu": [5, 10, 25, 50, 100, 200, 500],
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        "stateSave": true,
+        "deferRender": true,
+        "language": {
+            "lengthMenu": "Показать _MENU_ записей на странице",
+            "zeroRecords": "Записи не найдены",
+            "info": "Показаны записи с _START_ по _END_ из _TOTAL_",
+            "infoEmpty": "Нет данных",
+            "infoFiltered": "(отфильтровано из _MAX_ записей)"
+        },
+    });
+
+});
+
     function readURL(input) {
     if (input.files && input.files[0]) {
     var reader = new FileReader();
